@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace PuzzleTimer.Models
 {
-    public class Puzzles
+    public class Puzzle
     {
-        public string SKU { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
+        public string SKU { get; set; }
+        public int PieceCount { get; set; }
     }
 }
