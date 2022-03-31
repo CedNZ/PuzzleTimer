@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using PuzzleTimer.Interfaces;
+using PuzzleTimer.Models;
+using PuzzleTimer.Repositories;
+using PuzzleTimer.Services;
 
 namespace PuzzleTimer
 {
@@ -27,6 +31,14 @@ namespace PuzzleTimer
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddDbContextFactory<ApplicationContext>();
+
+            services.AddScoped<ISolvingSessionRepository, SolvingSessionRepository>();
+            services.AddScoped<ISolvingSessionService, SolvingSessionService>();
+
+            services.AddScoped<IPuzzleRepository, PuzzleRepository>();
+            services.AddScoped<IPuzzleService, PuzzleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

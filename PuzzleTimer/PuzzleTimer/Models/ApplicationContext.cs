@@ -14,6 +14,12 @@ namespace PuzzleTimer.Models
         public DbSet<SolvingSession> SolvingSessions { get; set; }
         public DbSet<TimeEntry> TimeEntries { get; set; }
 
+        public ApplicationContext(DbContextOptions<ApplicationContext> options)
+            : base(options)
+        {
+
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer("Server=.; Database=PuzzleTimer; Integrated Security=SSPI; TrustServerCertificate=True;");
