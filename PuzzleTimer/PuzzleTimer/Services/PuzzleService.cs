@@ -24,16 +24,25 @@ namespace PuzzleTimer.Services
         {
             var puzzle = await _puzzleRepository.FindPuzzle(barcode);
 
-            if (puzzle == null)
-            {
-                puzzle = new Puzzle
-                {
-                    Barcode = barcode,
-                    Name = "New Puzzle",
-                };
-            }
-
             return puzzle;
+        }
+
+        public async Task<Puzzle> CreatePuzzle(string barcode, string name, int pieceCount)
+        {
+            var puzzle = new Puzzle
+            {
+                Name = name,
+                Barcode = barcode,
+                PieceCount = pieceCount,
+            };
+
+            var saveResult = await _puzzleRepository.AddPuzzle(puzzle);
+
+            if (saveResult == 1)
+            {
+                return puzzle;
+            }
+            return null;
         }
     }
 }

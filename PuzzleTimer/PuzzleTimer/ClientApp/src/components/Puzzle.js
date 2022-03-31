@@ -8,21 +8,14 @@ export class Puzzle extends Component {
         this.state = {
             loading: true,
             puzzle: null,
-            puzzleBarcode: ''
+            puzzleBarcode: '',
+            puzzleName: '',
+            pieceCount: '',
         };
     }
 
     componentDidMount() {
 
-    }
-
-    renderPuzzleSearch() {
-        return (
-            <div>
-                <input type="text" value={this.state.puzzleBarcode} onChange={(e) => { this.setState({ puzzleBarcode: e.target.value }); }} />
-                <button onClick={() => { this.puzzleSearch(this) }}>Search</button>
-            </div>
-        )
     }
 
     renderPuzzle(puzzle) {
@@ -36,9 +29,32 @@ export class Puzzle extends Component {
         )
     }
 
+    renderPuzzleSearch() {
+        return (
+            <div>
+                <input type="text" value={this.state.puzzleBarcode} onChange={(e) => { this.setState({ puzzleBarcode: e.target.value }); }} />
+                <button onClick={() => { this.puzzleSearch(this) }}>Search</button>
+            </div>
+        )
+    }
+
+    renderCreatePuzzle() {
+        return (
+            <div>
+                <input type="text" value={this.state.puzzleBarcode} onChange={(e) => { this.setState({ puzzleBarcode: e.target.value }); }} placeholder="barcode" />
+                <br />
+                <input type="text" value={this.state.puzzleName} onChange={(e) => { this.setState({ puzzleName: e.target.value }); }} placeholder="name" />
+                <br />
+                <input type="number" value={this.state.pieceCount} onChange={(e) => { this.setState({ pieceCount: e.target.value }); }} placeholder="pieces" />
+                <br />
+                <button onClick={() => this.createPuzzle(this)}>Create Puzzle</button>
+            </div>
+        )
+    }
+
     render() {
         let contents = this.state.puzzle === null
-            ? this.renderPuzzleSearch()
+            ? this.state.loading ? this.renderPuzzleSearch() : this.renderCreatePuzzle()
             : this.renderPuzzle(this.state.puzzle);
 
         return (
@@ -57,6 +73,37 @@ export class Puzzle extends Component {
         }
 
         const response = await fetch(url);
+
+        if (response.ok) {
+            let puzzleJson = await response.json();
+            puzzleComponent.setState({
+                loading: false,
+                puzzle: puzzleJson,
+                puzzleBarcode: puzzleComponent.state.puzzleBarcode
+            });
+        } else {
+            puzzleComponent.setState({
+                loading: false,
+                puzzle: null,
+                puzzleBarcode: ''
+            });
+        }
+    }
+
+    async createPuzzle(puzzleComponent) {
+        var url = new URL('api/puzzle/createpuzzle', window.location.origin);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({
+                barcode: puzzleComponent.state.puzzleBarcode,
+                name: puzzleComponent.state.puzzleName,
+                pieceCount: puzzleComponent.state.pieceCount
+            })
+        });
 
         if (response.ok) {
             let puzzleJson = await response.json();

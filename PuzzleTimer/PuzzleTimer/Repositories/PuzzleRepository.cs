@@ -20,7 +20,11 @@ namespace PuzzleTimer.Repositories
 
         public Task<int> AddPuzzle(Puzzle puzzle)
         {
-            throw new NotImplementedException();
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                ctx.Puzzles.Add(puzzle);
+                return ctx.SaveChangesAsync();
+            }
         }
 
         public async Task<Puzzle> FindPuzzle(string barcode)
