@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import ReactModal from 'react-modal';
 
 export class Puzzle extends Component {
     static displayName = Puzzle.name;
@@ -11,7 +12,19 @@ export class Puzzle extends Component {
             puzzleBarcode: '',
             puzzleName: '',
             pieceCount: '',
+            showModal: false
         };
+
+        this.handleOpenModal = this.handleOpenModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
+    }
+
+    handleOpenModal() {
+        this.setState({ showModal: true });
+    }
+
+    handleCloseModal() {
+        this.setState({ showModal: false });
     }
 
     componentDidMount() {
@@ -59,8 +72,13 @@ export class Puzzle extends Component {
 
         return (
             <div>
-                <h1>Puzzle</h1>
-                {contents}
+                <button onClick={this.handleOpenModal}>Open Modal</button>
+                <ReactModal isOpen={this.state.showModal}
+                            contentLabel="Puzzle Modal" >
+                    <h1>Puzzle</h1>
+                    {contents}
+                    <button onClick={this.handleCloseModal}>Close</button>
+                </ReactModal>
             </div>
         )
     }

@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { Puzzle } from './Puzzle';
 
 export class SolvingSession extends Component {
     static displayName = SolvingSession.name;
@@ -20,6 +21,15 @@ export class SolvingSession extends Component {
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
+                <Puzzle />
+            </div>
+        )
+    }
+
+    renderCreateSession = () => {
+        return (
+            <div>
+                <Puzzle />
             </div>
         )
     }
