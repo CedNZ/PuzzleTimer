@@ -33,9 +33,16 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpPost("CreatePuzzle", Name = "CreatePuzzle")]
-        public Task<Puzzle> CreatePuzzle(string barcode, string name, int pieceCount)
+        public async Task<Puzzle> CreatePuzzle([FromBody]PuzzleDTO request)
         {
-            return _puzzleService.CreatePuzzle(barcode, name, pieceCount);
+            return await _puzzleService.CreatePuzzle(request.Barcode, request.Name, request.PieceCount);
         }
+    }
+
+    public class PuzzleDTO
+    {
+        public string Barcode { get; set; }
+        public string Name { get; set; }
+        public int PieceCount { get; set; }
     }
 }

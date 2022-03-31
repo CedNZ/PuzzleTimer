@@ -18,12 +18,12 @@ namespace PuzzleTimer.Repositories
             _contextFactory = contextFactory;
         }
 
-        public Task<int> AddPuzzle(Puzzle puzzle)
+        public async Task<int> AddPuzzle(Puzzle puzzle)
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
                 ctx.Puzzles.Add(puzzle);
-                return ctx.SaveChangesAsync();
+                return await ctx.SaveChangesAsync();
             }
         }
 

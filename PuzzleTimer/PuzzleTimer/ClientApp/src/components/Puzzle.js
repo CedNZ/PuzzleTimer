@@ -85,7 +85,7 @@ export class Puzzle extends Component {
             puzzleComponent.setState({
                 loading: false,
                 puzzle: null,
-                puzzleBarcode: ''
+                puzzleBarcode: puzzleComponent.state.puzzleBarcode
             });
         }
     }
