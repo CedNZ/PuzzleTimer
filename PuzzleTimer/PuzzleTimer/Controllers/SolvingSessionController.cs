@@ -24,7 +24,6 @@ namespace PuzzleTimer.Controllers
         [HttpGet]
         public SolvingSession Get()
         {
-            Thread.Sleep(5000);
             return new SolvingSession
             {
                 Id = 1,

@@ -16,12 +16,16 @@ export class SolvingSession extends Component {
         this.getSolvingSession();
     }
 
+    puzzleSearchResult = (puzzle) => {
+        this.setState({ puzzleId: puzzle.id })
+    }
+
     static renderSession(solvingSession) {
         return (
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
-                <Puzzle />
+                <Puzzle puzzleSearchResult={this.puzzleSearchResult} showModal={false} />
             </div>
         )
     }
@@ -29,7 +33,7 @@ export class SolvingSession extends Component {
     renderCreateSession = () => {
         return (
             <div>
-                <Puzzle />
+
             </div>
         )
     }

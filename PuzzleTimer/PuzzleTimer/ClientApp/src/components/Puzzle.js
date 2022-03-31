@@ -12,7 +12,7 @@ export class Puzzle extends Component {
             puzzleBarcode: '',
             puzzleName: '',
             pieceCount: '',
-            showModal: false
+            showModal: this.props.showModal ?? true
         };
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
@@ -25,6 +25,10 @@ export class Puzzle extends Component {
 
     handleCloseModal() {
         this.setState({ showModal: false });
+    }
+
+    puzzleSearchResult = (puzzle) => {
+        this.props.puzzleSearchResult(puzzle);
     }
 
     componentDidMount() {
