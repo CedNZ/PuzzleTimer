@@ -20,9 +20,20 @@ namespace PuzzleTimer.Services
             return puzzle;
         }
 
-        public Task<Puzzle> FindPuzzleInfo(string barcode)
+        public async Task<Puzzle> FindPuzzleInfo(string barcode)
         {
-            return _puzzleRepository.FindPuzzle(barcode);
+            var puzzle = await _puzzleRepository.FindPuzzle(barcode);
+
+            if (puzzle == null)
+            {
+                puzzle = new Puzzle
+                {
+                    Barcode = barcode,
+                    Name = "New Puzzle",
+                };
+            }
+
+            return puzzle;
         }
     }
 }

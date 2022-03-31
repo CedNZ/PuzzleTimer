@@ -23,11 +23,11 @@ namespace PuzzleTimer.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Puzzle> FindPuzzle(string barcode)
+        public async Task<Puzzle> FindPuzzle(string barcode)
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return ctx.Puzzles.FirstOrDefaultAsync(p => p.Barcode == barcode);
+                return await ctx.Puzzles.FirstOrDefaultAsync(p => p.Barcode == barcode);
             }
         }
 
