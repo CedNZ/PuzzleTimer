@@ -14,5 +14,7 @@ namespace PuzzleTimer.Interfaces
         public Task<SolvingSession> GetSolvingSession(int id);
 
         public Task<int> DeleteSolvingSession(SolvingSession solvingSession);
+
+        public Task<SolvingSession> GetCurrentSession();
     }
 }

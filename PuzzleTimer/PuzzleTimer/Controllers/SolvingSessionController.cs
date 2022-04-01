@@ -22,17 +22,19 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpGet]
-        public SolvingSession Get()
+        public async Task<SolvingSession> Get()
         {
-            return new SolvingSession
+            var session = await _solvingSessionService.GetCurrentSession();
+
+            if (session == null)
             {
-                Id = 1,
-                Started = DateTime.Now,
-            };
+                throw new ArgumentNullException();
+            }
+            return session;
         }
 
-        [HttpPost]
-        public async Task<SolvingSession> CreateSolvingSession(int puzzleId)
+        [HttpGet(nameof(CreateSolvingSession), Name = nameof(CreateSolvingSession))]
+        public async Task<SolvingSession> CreateSolvingSession([FromQuery]int puzzleId)
         {
             return await _solvingSessionService.CreateSession(puzzleId);
         }
