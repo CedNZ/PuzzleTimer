@@ -17,6 +17,8 @@ export class Puzzle extends Component {
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.puzzleSearch = this.puzzleSearch.bind(this);
+        this.createPuzzle = this.createPuzzle.bind(this);
     }
 
     handleOpenModal() {
@@ -76,7 +78,7 @@ export class Puzzle extends Component {
 
         return (
             <div>
-                <button onClick={this.handleOpenModal}>Open Modal</button>
+                <button onClick={this.handleOpenModal}>Open Puzzle Modal</button>
                 <ReactModal isOpen={this.state.showModal}
                             contentLabel="Puzzle Modal" >
                     <h1>Puzzle</h1>
@@ -87,8 +89,8 @@ export class Puzzle extends Component {
         )
     }
 
-    async puzzleSearch(puzzleComponent) {
-        var data = { barcode: puzzleComponent.state.puzzleBarcode };
+    async puzzleSearch() {
+        var data = { barcode: this.state.puzzleBarcode };
         var url = new URL('api/puzzle/getpuzzle', window.location.origin);
         for (let k in data) {
             url.searchParams.append(k, data[k]);
@@ -98,21 +100,21 @@ export class Puzzle extends Component {
 
         if (response.ok) {
             let puzzleJson = await response.json();
-            puzzleComponent.setState({
+            this.setState({
                 loading: false,
                 puzzle: puzzleJson,
-                puzzleBarcode: puzzleComponent.state.puzzleBarcode
+                puzzleBarcode: this.state.puzzleBarcode
             });
         } else {
-            puzzleComponent.setState({
+            this.setState({
                 loading: false,
                 puzzle: null,
-                puzzleBarcode: puzzleComponent.state.puzzleBarcode
+                puzzleBarcode: this.state.puzzleBarcode
             });
         }
     }
 
-    async createPuzzle(puzzleComponent) {
+    async createPuzzle() {
         var url = new URL('api/puzzle/createpuzzle', window.location.origin);
 
         const response = await fetch(url, {
@@ -121,21 +123,21 @@ export class Puzzle extends Component {
                 'Content-Type': 'application/json;charset=utf-8'
             },
             body: JSON.stringify({
-                barcode: puzzleComponent.state.puzzleBarcode,
-                name: puzzleComponent.state.puzzleName,
-                pieceCount: puzzleComponent.state.pieceCount
+                barcode: this.state.puzzleBarcode,
+                name: this.state.puzzleName,
+                pieceCount: this.state.pieceCount
             })
         });
 
         if (response.ok) {
             let puzzleJson = await response.json();
-            puzzleComponent.setState({
+            this.setState({
                 loading: false,
                 puzzle: puzzleJson,
-                puzzleBarcode: puzzleComponent.state.puzzleBarcode
+                puzzleBarcode: this.state.puzzleBarcode
             });
         } else {
-            puzzleComponent.setState({
+            this.setState({
                 loading: false,
                 puzzle: null,
                 puzzleBarcode: ''
