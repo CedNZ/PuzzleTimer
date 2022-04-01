@@ -12,6 +12,7 @@ export class SolvingSession extends Component {
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
+        this.createSession = this.createSession.bind(this);
     }
 
     componentDidMount() {
@@ -27,7 +28,6 @@ export class SolvingSession extends Component {
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
-                <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
             </div>
         )
     }
@@ -35,15 +35,24 @@ export class SolvingSession extends Component {
     renderCreateSession = () => {
         return (
             <div>
-
+                <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
+                <button onClick={() => this.createSession()}> Create New Session </button>
             </div>
         )
     }
 
     render() {
-        let contents = this.state.loading
-            ? <p><em>Loading...</em></p>
-            : this.renderSession(this.state.solvingSession);
+        let contents;
+
+        if (this.state.loading) {
+            contents = <p><em>Loading...</em></p>;
+        } else if (this.state.solvingSession === null) {
+            contents = this.renderCreateSession();
+        } else if (this.state.solvingSession !== null) {
+            contents = this.renderSession(this.state.solvingSession);
+        } else {
+            contents = <h1>Shit's fucked</h1>;
+        }
 
         return (
             <div>
@@ -56,7 +65,19 @@ export class SolvingSession extends Component {
 
     async getSolvingSession() {
         const response = await fetch('solvingsession');
+
+        if (response.ok) {
+            const data = await response.json();
+            this.setState({ loading: false, solvingSession: data });
+        } else {
+            this.setState({ loading: false, solvingSession: null });
+        }
+    }
+
+    async createSession() {
+        const response = await fetch('solvingsession/CreateSolvingSession?puzzleId=' + this.state.puzzleId);
+
         const data = await response.json();
-        this.setState({ loading: false, solvingSession: data })
+        this.setState({ loading: false, solvingSession: data });
     }
 }
