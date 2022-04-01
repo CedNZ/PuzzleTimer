@@ -78,15 +78,27 @@ export class Puzzle extends Component {
     }
 
     render() {
-        let contents = this.state.puzzle === null
-            ? this.state.loading ? this.renderPuzzleSearch() : this.renderCreatePuzzle()
-            : this.renderPuzzle(this.state.puzzle);
+        let contents;
+        let buttonText;
+
+        if (this.state.puzzle === null) {
+            if (this.state.loading) {
+                contents = this.renderPuzzleSearch();
+            } else {
+                contents = this.renderCreatePuzzle();
+            }
+            buttonText = 'Open Puzzle Search';
+        } else {
+            contents = this.renderPuzzle(this.state.puzzle);
+            buttonText = `${this.state.puzzle.id} - ${this.state.puzzle.name}`;
+        }
+
 
         return (
             <div>
-                <button onClick={this.handleOpenModal}>Open Puzzle Modal</button>
+                <button onClick={this.handleOpenModal}>{buttonText}</button>
                 <ReactModal isOpen={this.state.showModal}
-                            contentLabel="Puzzle Modal" >
+                            contentLabel="Puzzle Search" >
                     <h1>Puzzle</h1>
                     {contents}
                     <button onClick={this.handleCloseModal}>Close</button>
