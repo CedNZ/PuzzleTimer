@@ -15,6 +15,8 @@ export class Puzzle extends Component {
             showModal: this.props.showModal ?? true
         };
 
+        this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
+
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
         this.puzzleSearch = this.puzzleSearch.bind(this);
@@ -29,8 +31,12 @@ export class Puzzle extends Component {
         this.setState({ showModal: false });
     }
 
-    puzzleSearchResult = (puzzle) => {
+    puzzleSearchResult(puzzle) {
         this.props.puzzleSearchResult(puzzle);
+    }
+
+    componentWillMount() {
+        ReactModal.setAppElement('body');
     }
 
     componentDidMount() {
@@ -105,6 +111,7 @@ export class Puzzle extends Component {
                 puzzle: puzzleJson,
                 puzzleBarcode: this.state.puzzleBarcode
             });
+            this.puzzleSearchResult(puzzleJson);
         } else {
             this.setState({
                 loading: false,

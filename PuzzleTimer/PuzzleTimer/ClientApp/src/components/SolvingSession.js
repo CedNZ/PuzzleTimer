@@ -10,22 +10,24 @@ export class SolvingSession extends Component {
             loading: true,
             solvingSession: {}
         };
+
+        this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
     }
 
     componentDidMount() {
         this.getSolvingSession();
     }
 
-    puzzleSearchResult = (puzzle) => {
+    puzzleSearchResult(puzzle) {
         this.setState({ puzzleId: puzzle.id })
     }
 
-    static renderSession(solvingSession) {
+    renderSession(solvingSession) {
         return (
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
-                <Puzzle puzzleSearchResult={this.puzzleSearchResult} showModal={false} />
+                <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
             </div>
         )
     }
@@ -41,12 +43,13 @@ export class SolvingSession extends Component {
     render() {
         let contents = this.state.loading
             ? <p><em>Loading...</em></p>
-            : SolvingSession.renderSession(this.state.solvingSession);
+            : this.renderSession(this.state.solvingSession);
 
         return (
             <div>
                 <h1>Solving Session</h1>
                 {contents}
+                <p>{this.state.puzzleId}</p>
             </div>
         )
     }
