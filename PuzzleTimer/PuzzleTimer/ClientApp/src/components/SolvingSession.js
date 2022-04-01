@@ -8,11 +8,13 @@ export class SolvingSession extends Component {
         super(props);
         this.state = {
             loading: true,
-            solvingSession: {}
+            solvingSession: {},
+            puzzleId: ''
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
         this.createSession = this.createSession.bind(this);
+        this.completeSession = this.completeSession.bind(this);
     }
 
     componentDidMount() {
@@ -28,17 +30,26 @@ export class SolvingSession extends Component {
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
+                <button onClick={() => this.completeSession()}>Complete Session</button>
             </div>
         )
     }
 
     renderCreateSession = () => {
-        return (
-            <div>
-                <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
-                <button onClick={() => this.createSession()}> Create New Session </button>
-            </div>
-        )
+        if (this.state.puzzleId === '') {
+            return (
+                <div>
+                    <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
+                </div>
+            )
+        }
+        else {
+            return (
+                <div>
+                    <button onClick={() => this.createSession()}> Create New Session </button>
+                </div>
+            )
+        }
     }
 
     render() {
@@ -79,5 +90,15 @@ export class SolvingSession extends Component {
 
         const data = await response.json();
         this.setState({ loading: false, solvingSession: data });
+    }
+
+    async completeSession() {
+        const response = await fetch('solvingSession/CompleteSession?sessionId=' + this.state.solvingSession.id);
+
+        const data = await response.text();
+
+        this.setState({ loading: false, solvingSession: null, puzzleId: '' });
+
+        alert(data);
     }
 }

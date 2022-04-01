@@ -14,6 +14,8 @@ namespace PuzzleTimer.Interfaces
 
         public Task<int> AddSolvingSession(SolvingSession solvingSession, int puzzleId);
 
+        public Task<int> UpdateSolvingSession(SolvingSession solvingSession);
+
         public Task<int> DeleteSolvingSession(SolvingSession solvingSession);
 
         public Task<IEnumerable<SolvingSession>> GetAllSolvingSessions();

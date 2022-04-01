@@ -21,6 +21,26 @@ namespace PuzzleTimer.Services
             _puzzleService = puzzleService;
         }
 
+        public async Task<string> CompleteSession(int sessionId)
+        {
+            var session = await _sessionRepository.GetSolvingSession(sessionId);
+
+            session.Completed = DateTime.Now;
+
+            await _sessionRepository.UpdateSolvingSession(session);
+            //TODO: TimeEntry repo complete any running
+
+            if (session.TimeEntries != null && session.TimeEntries.Any())
+            {
+                var timespans = session.TimeEntries.Where(t => t.EndTime.HasValue).Select(t => t.EndTime.Value.Subtract(t.StartTime)).ToList();
+
+                var totalTime = timespans.Aggregate((curr, next) => curr.Add(next));
+
+                return totalTime.ToString("c");
+            }
+            return "";
+        }
+
         public async Task<SolvingSession> CreateSession(int puzzleId)
         {
             using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

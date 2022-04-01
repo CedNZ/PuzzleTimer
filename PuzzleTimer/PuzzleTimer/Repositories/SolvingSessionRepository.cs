@@ -63,5 +63,14 @@ namespace PuzzleTimer.Repositories
                 return await ctx.SolvingSessions.Where(predicate).ToListAsync();
             }
         }
+
+        public async Task<int> UpdateSolvingSession(SolvingSession solvingSession)
+        {
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                ctx.Entry(solvingSession).Property(p => p.Completed).IsModified = true;
+                return await ctx.SaveChangesAsync();
+            }
+        }
     }
 }
