@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { Puzzle } from './Puzzle';
+import { User } from './User';
 
 export class SolvingSession extends Component {
     static displayName = SolvingSession.name;
@@ -30,6 +31,7 @@ export class SolvingSession extends Component {
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
+                <p>{solvingSession.puzzle.id} - {solvingSession.puzzle.name}</p>
                 <button onClick={() => this.completeSession()}>Complete Session</button>
             </div>
         )
@@ -65,11 +67,19 @@ export class SolvingSession extends Component {
             contents = <h1>Shit's fucked</h1>;
         }
 
+        let userElement;
+        if (this.state.solvingSession !== null) {
+            userElement = (
+                <User solvingSessionId={this.state.solvingSession.id} />
+            );
+        }
+
         return (
             <div>
                 <h1>Solving Session</h1>
                 {contents}
-                <p>{this.state.puzzleId}</p>
+                <br />
+                {userElement}
             </div>
         )
     }

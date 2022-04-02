@@ -39,6 +39,9 @@ namespace PuzzleTimer
 
             services.AddScoped<IPuzzleRepository, PuzzleRepository>();
             services.AddScoped<IPuzzleService, PuzzleService>();
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

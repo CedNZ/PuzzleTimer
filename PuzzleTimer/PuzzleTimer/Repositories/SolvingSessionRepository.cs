@@ -60,7 +60,7 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return await ctx.SolvingSessions.Where(predicate).ToListAsync();
+                return await ctx.SolvingSessions.Include(s => s.Puzzle).Where(predicate).ToListAsync();
             }
         }
 
