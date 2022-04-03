@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
+using System;
+using System.Threading.Tasks;
 
 namespace PuzzleTimer.Controllers
 {
@@ -21,7 +18,7 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpGet("GetPuzzle", Name = "GetPuzzle")]
-        public async Task<Puzzle> GetPuzzle([FromQuery]string barcode)
+        public async Task<Puzzle> GetPuzzle([FromQuery] string barcode)
         {
             var puzzle = await _puzzleService.FindPuzzleInfo(barcode);
 
@@ -33,7 +30,7 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpPost("CreatePuzzle", Name = "CreatePuzzle")]
-        public async Task<Puzzle> CreatePuzzle([FromBody]PuzzleDTO request)
+        public async Task<Puzzle> CreatePuzzle([FromBody] PuzzleDTO request)
         {
             return await _puzzleService.CreatePuzzle(request.Barcode, request.Name, request.PieceCount);
         }

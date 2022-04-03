@@ -2,10 +2,6 @@
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PuzzleTimer.Controllers
@@ -34,19 +30,19 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpGet(nameof(CreateSolvingSession), Name = nameof(CreateSolvingSession))]
-        public async Task<SolvingSession> CreateSolvingSession([FromQuery]int puzzleId)
+        public async Task<SolvingSession> CreateSolvingSession([FromQuery] int puzzleId)
         {
             return await _solvingSessionService.CreateSession(puzzleId);
         }
 
         [HttpGet(nameof(CompleteSession), Name = nameof(CompleteSession))]
-        public async Task<string> CompleteSession([FromQuery]int sessionId)
+        public async Task<string> CompleteSession([FromQuery] int sessionId)
         {
             return await _solvingSessionService.CompleteSession(sessionId);
         }
 
         [HttpGet(nameof(AddUser), Name = nameof(AddUser))]
-        public async Task<SolvingSession> AddUser([FromQuery]int sessionId, [FromQuery]int userId)
+        public async Task<SolvingSession> AddUser([FromQuery] int sessionId, [FromQuery] int userId)
         {
             return await _solvingSessionService.AddUser(sessionId, userId);
         }
