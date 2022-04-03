@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace PuzzleTimer.Controllers
 {

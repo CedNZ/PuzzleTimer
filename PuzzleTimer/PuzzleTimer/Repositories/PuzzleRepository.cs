@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
-using System.Threading.Tasks;
 
 namespace PuzzleTimer.Repositories
 {

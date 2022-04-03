@@ -1,5 +1,5 @@
-﻿using PuzzleTimer.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using PuzzleTimer.Models;
 
 namespace PuzzleTimer.Interfaces
 {
