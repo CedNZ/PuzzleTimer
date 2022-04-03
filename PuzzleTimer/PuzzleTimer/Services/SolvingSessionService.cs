@@ -21,6 +21,11 @@ namespace PuzzleTimer.Services
             _puzzleService = puzzleService;
         }
 
+        public async Task<SolvingSession> AddUser(int sessionId, int userId)
+        {
+            return await _sessionRepository.AddUser(sessionId, userId);
+        }
+
         public async Task<string> CompleteSession(int sessionId)
         {
             var session = await _sessionRepository.GetSolvingSession(sessionId);

@@ -18,5 +18,7 @@ namespace PuzzleTimer.Interfaces
         public Task<SolvingSession> GetCurrentSession();
 
         public Task<string> CompleteSession(int sessionId);
+
+        public Task<SolvingSession> AddUser(int sessionId, int userId);
     }
 }

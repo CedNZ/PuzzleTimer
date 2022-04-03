@@ -16,6 +16,7 @@ export class SolvingSession extends Component {
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
         this.createSession = this.createSession.bind(this);
         this.completeSession = this.completeSession.bind(this);
+        this.addUser = this.addUser.bind(this);
     }
 
     componentDidMount() {
@@ -54,6 +55,22 @@ export class SolvingSession extends Component {
         }
     }
 
+    renderUsers() {
+        let existingUsers;
+        if (this.state.solvingSession !== null && this.state.solvingSession.users !== undefined && this.state.solvingSession.users.length > 0) {
+            existingUsers = this.state.solvingSession.users.map((u) => {
+                return <User key={u.id} user={u} solvingSessionId={this.state.solvingSession.id} >{u.name}</User>
+            });
+        }
+
+        return (
+            <div>
+                {existingUsers}
+                <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />
+            </div>
+        )
+    }
+
     render() {
         let contents;
 
@@ -69,9 +86,7 @@ export class SolvingSession extends Component {
 
         let userElement;
         if (this.state.solvingSession !== null) {
-            userElement = (
-                <User solvingSessionId={this.state.solvingSession.id} />
-            );
+            userElement = this.renderUsers();
         }
 
         return (
@@ -110,5 +125,13 @@ export class SolvingSession extends Component {
         this.setState({ loading: false, solvingSession: null, puzzleId: '' });
 
         alert(data);
+    }
+
+    async addUser(userId) {
+        const response = await fetch(`solvingSession/AddUser?sessionId=${this.state.solvingSession.id}&userId=${userId}`)
+
+        const data = await response.json();
+
+        this.setState({ solvingSession: data });
     }
 }

@@ -21,5 +21,7 @@ namespace PuzzleTimer.Interfaces
         public Task<IEnumerable<SolvingSession>> GetAllSolvingSessions();
 
         public Task<IEnumerable<SolvingSession>> GetSolvingSessionsWhere(Expression<Func<SolvingSession, bool>> predicate);
+
+        public Task<SolvingSession> AddUser(int sessionId, int userId);
     }
 }

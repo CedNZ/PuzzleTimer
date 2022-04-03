@@ -31,6 +31,28 @@ namespace PuzzleTimer.Repositories
             }
         }
 
+        public async Task<SolvingSession> AddUser(int sessionId, int userId)
+        {
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                var solvingSession = await ctx.SolvingSessions
+                                        .Include(s => s.Puzzle)
+                                        .Include(s => s.Users)
+                                        .FirstOrDefaultAsync(s => s.Id == sessionId);
+
+                var user = await ctx.Users.FindAsync(userId);
+
+                solvingSession.Users.Add(user);
+
+                var lines = await ctx.SaveChangesAsync();
+                if (lines == 1)
+                {
+                    return solvingSession;
+                }
+                return null;
+            }
+        }
+
         public async Task<int> DeleteSolvingSession(SolvingSession solvingSession)
         {
             using (var ctx = _contextFactory.CreateDbContext())
@@ -52,7 +74,10 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return await ctx.SolvingSessions.FindAsync(id);
+                return await ctx.SolvingSessions
+                    .Include(s => s.Puzzle)
+                    .Include(s => s.Users)
+                    .FirstOrDefaultAsync(s => s.Id == id);
             }
         }
 
@@ -60,7 +85,11 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return await ctx.SolvingSessions.Include(s => s.Puzzle).Where(predicate).ToListAsync();
+                return await ctx.SolvingSessions
+                    .Include(s => s.Puzzle)
+                    .Include(s => s.Users)
+                    .Where(predicate)
+                    .ToListAsync();
             }
         }
 

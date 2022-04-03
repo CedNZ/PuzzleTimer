@@ -7,13 +7,14 @@ export class User extends Component {
         super(props);
         this.state = {
             loading: true,
-            user: null,
+            user: this.props.user,
             solvingSessionId: this.props.solvingSessionId,
             userSelection: [],
             nameSearch: ''
         };
 
         this.createUser = this.createUser.bind(this);
+        this.setSelectedUser = this.setSelectedUser.bind(this);
     }
 
     renderSearchUser() {
@@ -21,7 +22,7 @@ export class User extends Component {
         if (this.state.userSelection.length != 0) {
             userSelect = (
                 <ul>
-                    {this.state.userSelection.map((user) => <li value={user.id} onClick={() => this.setSelectedUser(user)}>{user.name} </li> )}
+                    {this.state.userSelection.map((user) => <li key={user.id} value={user.id} onClick={() => this.setSelectedUser(user)}>{user.name} </li> )}
                 </ul>
             )
         } else if (this.state.nameSearch.length > 0) {
@@ -58,7 +59,7 @@ export class User extends Component {
 
     render() {
         let contents;
-        if (this.state.user === null) {
+        if (this.state.user === null || this.state.user === undefined) {
             contents = this.renderSearchUser();
         } else {
             contents = this.renderUser();
@@ -72,7 +73,8 @@ export class User extends Component {
     }
 
     setSelectedUser(user) {
-        this.setState({ user: user });
+        this.setState({ nameSearch: '', userSelection: [] });
+        this.props.userSelect(user);
     }
 
     async createUser(userName) {

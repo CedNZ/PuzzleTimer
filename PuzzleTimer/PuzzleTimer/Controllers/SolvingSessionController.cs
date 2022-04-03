@@ -44,5 +44,11 @@ namespace PuzzleTimer.Controllers
         {
             return await _solvingSessionService.CompleteSession(sessionId);
         }
+
+        [HttpGet(nameof(AddUser), Name = nameof(AddUser))]
+        public async Task<SolvingSession> AddUser([FromQuery]int sessionId, [FromQuery]int userId)
+        {
+            return await _solvingSessionService.AddUser(sessionId, userId);
+        }
     }
 }
