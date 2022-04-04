@@ -54,7 +54,7 @@ export class TimeEntry extends Component {
 
         return (
             <div>
-                <p>{elapsed.hours}h {elapsed.minutes}m {elapsed.seconds}s</p>
+                <p>{elapsed.hours}h {elapsed.minutes}m {elapsed.seconds.toFixed()}s</p>
                 <button onClick={() => this.stopTimer()} className="btn btn-primary">■</button>
             </div>
         )

@@ -34,7 +34,7 @@ export class SolvingSession extends Component {
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
                 <p>{solvingSession.puzzle.id} - {solvingSession.puzzle.name}</p>
-                <button onClick={() => this.completeSession()}>Complete Session</button>
+                <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
             </div>
         )
     }
@@ -50,7 +50,7 @@ export class SolvingSession extends Component {
         else {
             return (
                 <div>
-                    <button onClick={() => this.createSession()}> Create New Session </button>
+                    <button onClick={() => this.createSession()} className="btn btn-primary"> Create New Session </button>
                 </div>
             )
         }
@@ -68,7 +68,7 @@ export class SolvingSession extends Component {
         if (this.state.showAddUser) {
             showAddUser = <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />;
         } else {
-            showAddUser = <button onClick={() => this.setState({ showAddUser: true })}>+</button>
+            showAddUser = <button onClick={() => this.setState({ showAddUser: true })} className="btn btn-primary">+</button>
         }
 
         return (

@@ -95,7 +95,7 @@ export class Puzzle extends Component {
 
 
         return (
-            <div>
+            <div className="puzzle">
                 <button onClick={this.handleOpenModal}>{buttonText}</button>
                 <ReactModal isOpen={this.state.showModal}
                             contentLabel="Puzzle Search" >
