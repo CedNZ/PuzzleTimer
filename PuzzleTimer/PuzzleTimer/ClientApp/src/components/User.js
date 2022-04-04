@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react';
+import { TimeEntry } from './TimeEntry';
 
 export class User extends Component {
     static displayName = User.name;
@@ -51,8 +52,9 @@ export class User extends Component {
 
     renderUser() {
         return (
-            <div>
-                <h4>{this.state.user.id} - {this.state.user.name}</h4>
+            <div className="card-body">
+                <h4 className="card-title">{this.state.user.id} - {this.state.user.name}</h4>
+                <TimeEntry sessionId={this.state.solvingSessionId} userId={this.state.user.id} />
             </div>
         )
     }
@@ -66,7 +68,7 @@ export class User extends Component {
         }
 
         return (
-            <div>
+            <div className="user col card">
                 {contents}
             </div>
         )
