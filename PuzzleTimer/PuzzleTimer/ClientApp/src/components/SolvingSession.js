@@ -10,7 +10,8 @@ export class SolvingSession extends Component {
         this.state = {
             loading: true,
             solvingSession: {},
-            puzzleId: ''
+            puzzleId: '',
+            showAddUser: false
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
@@ -63,10 +64,21 @@ export class SolvingSession extends Component {
             });
         }
 
+        let showAddUser;
+        if (this.state.showAddUser) {
+            showAddUser = <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />;
+        } else {
+            showAddUser = <button onClick={() => this.setState({ showAddUser: true })}>+</button>
+        }
+
         return (
-            <div>
-                {existingUsers}
-                <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />
+            <div className="userContainer container">
+                <div className="row gx-5">
+                    {existingUsers}
+                </div>
+                <div className="row">
+                    {showAddUser}
+                </div>
             </div>
         )
     }
@@ -90,7 +102,7 @@ export class SolvingSession extends Component {
         }
 
         return (
-            <div>
+            <div className="solvingSession">
                 <h1>Solving Session</h1>
                 {contents}
                 <br />
@@ -132,6 +144,6 @@ export class SolvingSession extends Component {
 
         const data = await response.json();
 
-        this.setState({ solvingSession: data });
+        this.setState({ solvingSession: data, showAddUser: false });
     }
 }
