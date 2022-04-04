@@ -11,5 +11,7 @@ namespace PuzzleTimer.Interfaces
         public Task<User> CreateUser(string name);
 
         public Task<IEnumerable<User>> FindUsersByName(string name);
+
+        public Task<IEnumerable<User>> GetUsersForSession(int sessionId);
     }
 }

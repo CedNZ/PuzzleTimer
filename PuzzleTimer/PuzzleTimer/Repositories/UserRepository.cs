@@ -42,5 +42,17 @@ namespace PuzzleTimer.Repositories
                 return await ctx.Users.FindAsync(id);
             }
         }
+
+        public async Task<IEnumerable<User>> GetUsersForSession(int sessionId)
+        {
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                var session = await ctx.SolvingSessions
+                    .Include(s => s.Users)
+                    .FirstOrDefaultAsync(s => s.Id == sessionId);
+
+                return session.Users.ToList();
+            }
+        }
     }
 }

@@ -28,5 +28,10 @@ namespace PuzzleTimer.Services
         {
             return await _userRepository.GetUser(id);
         }
+
+        public async Task<IEnumerable<User>> GetUsersForSession(int sessionId)
+        {
+            return await _userRepository.GetUsersForSession(sessionId);
+        }
     }
 }

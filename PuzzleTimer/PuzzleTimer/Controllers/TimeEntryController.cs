@@ -48,7 +48,7 @@ namespace PuzzleTimer.Controllers
         public async Task<string> GetTotalTime([FromQuery] int sessionId, [FromQuery] int userId)
         {
             var totalTime = await _timeEntryService.GetTotalTime(sessionId, userId);
-            return totalTime.ToString("c");
+            return totalTime.ToString("h'h 'm'm 's's'");
         }
     }
 }

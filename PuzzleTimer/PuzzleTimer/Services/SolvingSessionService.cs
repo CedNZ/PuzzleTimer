@@ -11,12 +11,15 @@ namespace PuzzleTimer.Services
     public class SolvingSessionService : ISolvingSessionService
     {
         private readonly ISolvingSessionRepository _sessionRepository;
-        private readonly IPuzzleService _puzzleService;
+        private readonly ITimeEntryService _timeEntryService;
+        private readonly IUserService _userService;
 
-        public SolvingSessionService(ISolvingSessionRepository sessionRepository, IPuzzleService puzzleService)
+
+        public SolvingSessionService(ISolvingSessionRepository sessionRepository, ITimeEntryService timeEntryService, IUserService userService)
         {
             _sessionRepository = sessionRepository;
-            _puzzleService = puzzleService;
+            _timeEntryService = timeEntryService;
+            _userService = userService;
         }
 
         public async Task<SolvingSession> AddUser(int sessionId, int userId)
@@ -26,20 +29,31 @@ namespace PuzzleTimer.Services
 
         public async Task<string> CompleteSession(int sessionId)
         {
+            var stopTime = DateTime.Now;
+
             var session = await _sessionRepository.GetSolvingSession(sessionId);
 
-            session.Completed = DateTime.Now;
+            session.Completed = stopTime;
 
             await _sessionRepository.UpdateSolvingSession(session);
-            //TODO: TimeEntry repo complete any running
+            var users = await _userService.GetUsersForSession(sessionId);
+
+            foreach (var user in users)
+            {
+                var timeEntry = await _timeEntryService.GetCurrent(sessionId, user.Id);
+                if (timeEntry != null)
+                {
+                    await _timeEntryService.Stop(timeEntry.Id, stopTime);
+                }
+            }
 
             if (session.TimeEntries != null && session.TimeEntries.Any())
             {
-                var timespans = session.TimeEntries.Where(t => t.EndTime.HasValue).Select(t => t.EndTime.Value.Subtract(t.StartTime)).ToList();
+                var totalTime = session.TimeEntries
+                    .Where(t => t.EndTime.HasValue)
+                    .Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
 
-                var totalTime = timespans.Aggregate((curr, next) => curr.Add(next));
-
-                return totalTime.ToString("c");
+                return totalTime.ToString("h'h 'm'm 's's'");
             }
             return "";
         }
