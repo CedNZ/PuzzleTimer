@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
+import eventBus from './EventBus';
 
 export class SolvingSession extends Component {
     static displayName = SolvingSession.name;
@@ -18,6 +19,7 @@ export class SolvingSession extends Component {
         this.createSession = this.createSession.bind(this);
         this.completeSession = this.completeSession.bind(this);
         this.addUser = this.addUser.bind(this);
+        this.dispatchTimerEvent = this.dispatchTimerEvent.bind(this);
     }
 
     componentDidMount() {
@@ -28,6 +30,10 @@ export class SolvingSession extends Component {
         this.setState({ puzzleId: puzzle.id })
     }
 
+    dispatchTimerEvent(running) {
+        eventBus.dispatch("timerEvent", { running: running });
+    }
+
     renderSession(solvingSession) {
         return (
             <div>
@@ -35,6 +41,10 @@ export class SolvingSession extends Component {
                 <p>{solvingSession.started}</p>
                 <p>{solvingSession.puzzle.id} - {solvingSession.puzzle.name}</p>
                 <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
+                <div className="btn-group">
+                    <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success">Start Timers</button>
+                    <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger">Stop Timers</button>
+                </div>
             </div>
         )
     }

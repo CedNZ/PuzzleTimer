@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
-import { DateTime } from 'luxon'
+import { DateTime } from 'luxon';
+import eventBus from './EventBus';
 
 export class TimeEntry extends Component {
     static displayName = TimeEntry.name;
@@ -25,6 +26,17 @@ export class TimeEntry extends Component {
     componentDidMount() {
         this.getCurrent();
         this.getTotal();
+        eventBus.on("timerEvent", (data) => {
+            if (data.running) {
+                this.startTimer();
+            } else {
+                this.stopTimer();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        eventBus.remove("timerEvent");
     }
 
     start() {
