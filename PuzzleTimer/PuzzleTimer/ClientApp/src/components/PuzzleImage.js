@@ -43,12 +43,12 @@ export class PuzzleImage extends Component {
         let count = 0;
 
         return (
-            <div className="carousel slide" data-bs-ride="carousel" id={this.props.puzzleId} >
-                <div className="carousel inner">
+            <div className="container d-block" data-bs-ride="carousel" id={this.props.puzzleId}>
+                <div className="">
                     {this.state.images.map((img) => {
                         return (
-                            <div className={`carousel-item ${count++ < 1 ? 'active' : ''}`}>
-                                <img src={img.base64} className="d-block w-100" alt={this.props.puzzleId + '-' + count} />
+                            <div className={`${count++ < 1 ? 'active' : ''}`}>
+                                <img src={img.base64} className="w-100" alt={this.props.puzzleId + '-' + count} />
                             </div>
                         )
                     })}
