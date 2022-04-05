@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace PuzzleTimer.Models
 {
@@ -20,6 +21,7 @@ namespace PuzzleTimer.Models
         {
             //optionsBuilder.UseSqlServer("Server=.; Database=PuzzleTimer; Integrated Security=SSPI; TrustServerCertificate=True;");
             optionsBuilder.UseSqlite("Data Source=PuzzleTimerDB.db;");
+            optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
         }
     }
 }
