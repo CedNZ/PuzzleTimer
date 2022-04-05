@@ -18,15 +18,15 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpGet("GetPuzzle", Name = "GetPuzzle")]
-        public async Task<Puzzle> GetPuzzle([FromQuery] string barcode)
+        public async Task<IActionResult> GetPuzzle([FromQuery] string barcode)
         {
             var puzzle = await _puzzleService.FindPuzzleInfo(barcode);
 
             if (puzzle == null)
             {
-                throw new Exception();
+                return Problem();
             }
-            return puzzle;
+            return Ok(puzzle);
         }
 
         [HttpPost("CreatePuzzle", Name = "CreatePuzzle")]

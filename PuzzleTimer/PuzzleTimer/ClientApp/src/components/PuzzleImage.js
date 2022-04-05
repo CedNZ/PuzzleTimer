@@ -48,7 +48,7 @@ export class PuzzleImage extends Component {
                     {this.state.images.map((img) => {
                         return (
                             <div className={`carousel-item ${count++ < 1 ? 'active' : ''}`}>
-                                <img src={img.base64} className="d-block w-100" />
+                                <img src={img.base64} className="d-block w-100" alt={this.props.puzzleId + '-' + count} />
                             </div>
                         )
                     })}
@@ -76,7 +76,7 @@ export class PuzzleImage extends Component {
             return;
         }
 
-        var url = new URL('image/addImage', window.location.origin);
+        const url = new URL('image/addImage', window.location.origin);
 
         const response = await fetch(url, {
             method: 'POST',
@@ -100,12 +100,17 @@ export class PuzzleImage extends Component {
     }
 
     async getImages() {
-        let response;
+        let url;
+
         if (this.props.sessionId) {
-            response = await fetch('image/getSessionImages?sessionId=' + this.props.sessionId);
+            url = new URL('image/getSessionImages?sessionId=' + this.props.sessionId, window.location.origin);
         } else if (this.props.puzzleId) {
-            response = await fetch('image/getPuzzleImages?puzzleId=' + this.props.puzzleId);
+            url = new URL('image/getPuzzleImages?puzzleId=' + this.props.puzzleId, window.location.origin);
+        } else {
+            return;
         }
+
+        const response = await fetch(url);
 
         if (response.ok) {
             const data = await response.json();

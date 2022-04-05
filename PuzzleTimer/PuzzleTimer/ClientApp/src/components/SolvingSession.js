@@ -122,7 +122,8 @@ export class SolvingSession extends Component {
     }
 
     async getSolvingSession() {
-        const response = await fetch('solvingsession');
+        const url = new URL('solvingsession', window.location.origin);
+        const response = await fetch(url);
 
         if (response.ok) {
             const data = await response.json();
@@ -133,14 +134,16 @@ export class SolvingSession extends Component {
     }
 
     async createSession() {
-        const response = await fetch('solvingsession/CreateSolvingSession?puzzleId=' + this.state.puzzleId);
+        const url = new URL('solvingsession/CreateSolvingSession?puzzleId=' + this.state.puzzleId, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.json();
         this.setState({ loading: false, solvingSession: data });
     }
 
     async completeSession() {
-        const response = await fetch('solvingSession/CompleteSession?sessionId=' + this.state.solvingSession.id);
+        const url = new URL('solvingSession/CompleteSession?sessionId=' + this.state.solvingSession.id, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.text();
 
@@ -150,7 +153,8 @@ export class SolvingSession extends Component {
     }
 
     async addUser(userId) {
-        const response = await fetch(`solvingSession/AddUser?sessionId=${this.state.solvingSession.id}&userId=${userId}`)
+        const url = new URL(`solvingSession/AddUser?sessionId=${this.state.solvingSession.id}&userId=${userId}`, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.json();
 

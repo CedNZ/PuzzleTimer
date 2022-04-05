@@ -94,7 +94,8 @@ export class TimeEntry extends Component {
     }
 
     async startTimer() {
-        const response = await fetch(`timeEntry/Start?sessionId=${this.props.sessionId}&userId=${this.props.userId}`);
+        const url = new URL(`timeEntry/Start?sessionId=${this.props.sessionId}&userId=${this.props.userId}`, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.json();
 
@@ -104,7 +105,8 @@ export class TimeEntry extends Component {
     }
 
     async stopTimer() {
-        const response = await fetch('timeEntry/Stop?timeEntryId=' + this.state.timeEntry.id);
+        const url = new URL('timeEntry/Stop?timeEntryId=' + this.state.timeEntry.id, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.json();
 
@@ -116,9 +118,10 @@ export class TimeEntry extends Component {
     }
 
     async getCurrent() {
-        const response = await fetch(`timeEntry/GetCurrent?sessionId=${this.props.sessionId}&userId=${this.props.userId}`);
+        const url = new URL(`timeEntry/GetCurrent?sessionId=${this.props.sessionId}&userId=${this.props.userId}`, window.location.origin);
+        const response = await fetch(url);
 
-        if (response.status == 200) {
+        if (response.status === 200) {
             const data = await response.json();
 
             this.setState({ timeEntry: data, running: true });
@@ -128,7 +131,8 @@ export class TimeEntry extends Component {
     }
 
     async getTotal() {
-        const response = await fetch(`timeEntry/GetTotalTime?sessionId=${this.props.sessionId}&userId=${this.props.userId}`);
+        const url = new URL(`timeEntry/GetTotalTime?sessionId=${this.props.sessionId}&userId=${this.props.userId}`, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.text();
 

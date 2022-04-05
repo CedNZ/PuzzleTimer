@@ -106,14 +106,14 @@ export class Puzzle extends Component {
                     {contents}
                     <button onClick={this.handleCloseModal}>Close</button>
                 </ReactModal>
-                <PuzzleImage puzzleId={this.state.puzzle.id} sessionId={this.props.sessionId} />
+                <PuzzleImage puzzleId={this.state.puzzle?.id ?? null} sessionId={this.props.sessionId} />
             </div>
         )
     }
 
     async puzzleSearch() {
         var data = { barcode: this.state.puzzleBarcode };
-        var url = new URL('api/puzzle/getpuzzle', window.location.origin);
+        const url = new URL('api/puzzle/getpuzzle', window.location.origin);
         for (let k in data) {
             url.searchParams.append(k, data[k]);
         }
@@ -138,7 +138,7 @@ export class Puzzle extends Component {
     }
 
     async createPuzzle() {
-        var url = new URL('api/puzzle/createpuzzle', window.location.origin);
+        const url = new URL('api/puzzle/createpuzzle', window.location.origin);
 
         const response = await fetch(url, {
             method: 'POST',

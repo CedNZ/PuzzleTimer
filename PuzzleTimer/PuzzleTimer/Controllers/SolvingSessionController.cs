@@ -18,15 +18,15 @@ namespace PuzzleTimer.Controllers
         }
 
         [HttpGet]
-        public async Task<SolvingSession> Get()
+        public async Task<IActionResult> Get()
         {
             var session = await _solvingSessionService.GetCurrentSession();
 
             if (session == null)
             {
-                throw new ArgumentNullException();
+                return Problem();
             }
-            return session;
+            return Ok(session);
         }
 
         [HttpGet(nameof(CreateSolvingSession), Name = nameof(CreateSolvingSession))]

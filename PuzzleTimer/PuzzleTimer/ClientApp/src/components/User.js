@@ -20,7 +20,7 @@ export class User extends Component {
 
     renderSearchUser() {
         let userSelect;
-        if (this.state.userSelection.length != 0) {
+        if (this.state.userSelection.length !== 0) {
             userSelect = (
                 <ul>
                     {this.state.userSelection.map((user) => <li key={user.id} value={user.id} onClick={() => this.setSelectedUser(user)}>{user.name} </li> )}
@@ -80,7 +80,8 @@ export class User extends Component {
     }
 
     async createUser(userName) {
-        const response = await fetch('user/createUser?userName=' + userName);
+        const url = new URL('user/createUser?userName=' + userName, window.location.origin);
+        const response = await fetch(url);
 
         const data = response.json();
 
@@ -88,7 +89,8 @@ export class User extends Component {
     }
 
     async userSearch(name) {
-        const response = await fetch('user/FindUsersByName?name=' + name);
+        const url = new URL('user/FindUsersByName?name=' + name, window.location.origin);
+        const response = await fetch(url);
 
         const data = await response.json();
 
