@@ -1,5 +1,6 @@
 ﻿import React, { Component } from 'react';
 import ReactModal from 'react-modal';
+import { PuzzleImage } from './PuzzleImage';
 
 export class Puzzle extends Component {
     static displayName = Puzzle.name;
@@ -8,7 +9,7 @@ export class Puzzle extends Component {
         super(props);
         this.state = {
             loading: true,
-            puzzle: null,
+            puzzle: this.props.puzzle ?? null,
             puzzleBarcode: '',
             puzzleName: '',
             pieceCount: '',
@@ -32,7 +33,9 @@ export class Puzzle extends Component {
     }
 
     puzzleSearchResult(puzzle) {
-        this.props.puzzleSearchResult(puzzle);
+        if (this.props.puzzleSearchResult !== undefined) {
+            this.props.puzzleSearchResult(puzzle);
+        }
     }
 
     componentWillMount() {
@@ -103,6 +106,7 @@ export class Puzzle extends Component {
                     {contents}
                     <button onClick={this.handleCloseModal}>Close</button>
                 </ReactModal>
+                <PuzzleImage puzzleId={this.state.puzzle.id} sessionId={this.props.sessionId} />
             </div>
         )
     }

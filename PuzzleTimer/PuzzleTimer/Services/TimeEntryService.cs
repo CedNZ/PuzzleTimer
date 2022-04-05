@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
@@ -51,7 +49,7 @@ namespace PuzzleTimer.Services
         {
             var timeEntry = await _repository.Get(timeEntryId);
             timeEntry.EndTime = stopTime;
-            
+
             if (await _repository.Update(timeEntry) == 1)
             {
                 return timeEntry;

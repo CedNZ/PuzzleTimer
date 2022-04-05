@@ -39,7 +39,7 @@ export class SolvingSession extends Component {
             <div>
                 <p>{solvingSession.id}</p>
                 <p>{solvingSession.started}</p>
-                <p>{solvingSession.puzzle.id} - {solvingSession.puzzle.name}</p>
+                <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
                 <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
                 <div className="btn-group">
                     <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success">Start Timers</button>
