@@ -11,7 +11,7 @@ namespace PuzzleTimer.Repositories
 {
     public class ImageRepository : IImageRepository
     {
-        private const string BASE_DIR = @"C:\Temp\PuzzleTimer\Images";
+        private const string BASE_DIR = @"/tmp/PuzzleTimer/";
         private readonly IDbContextFactory<ApplicationContext> _contextFactory;
 
         public ImageRepository(IDbContextFactory<ApplicationContext> contextFactory)
