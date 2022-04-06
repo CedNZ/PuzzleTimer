@@ -7,7 +7,6 @@ export class User extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
             user: this.props.user,
             solvingSessionId: this.props.solvingSessionId,
             userSelection: [],
@@ -83,9 +82,9 @@ export class User extends Component {
         const url = new URL('user/createUser?userName=' + userName, window.location.origin);
         const response = await fetch(url);
 
-        const data = response.json();
+        const data = await response.json();
 
-        this.setState({ loading: false, user: data });
+        this.setSelectedUser(data);
     }
 
     async userSearch(name) {

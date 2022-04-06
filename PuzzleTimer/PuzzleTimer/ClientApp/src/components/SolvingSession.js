@@ -37,14 +37,12 @@ export class SolvingSession extends Component {
     renderSession(solvingSession) {
         return (
             <div>
-                <p>{solvingSession.id}</p>
-                <p>{solvingSession.started}</p>
-                <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
                 <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
                 <div className="btn-group">
                     <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success">Start Timers</button>
                     <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger">Stop Timers</button>
                 </div>
+                <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
             </div>
         )
     }
@@ -114,9 +112,9 @@ export class SolvingSession extends Component {
         return (
             <div className="solvingSession">
                 <h1>Solving Session</h1>
+                {userElement}
                 {contents}
                 <br />
-                {userElement}
             </div>
         )
     }

@@ -94,6 +94,10 @@ export class TimeEntry extends Component {
     }
 
     async startTimer() {
+        if (this.state.running) {
+            return;
+        }
+
         const url = new URL(`timeEntry/Start?sessionId=${this.props.sessionId}&userId=${this.props.userId}`, window.location.origin);
         const response = await fetch(url);
 
@@ -105,6 +109,10 @@ export class TimeEntry extends Component {
     }
 
     async stopTimer() {
+        if (!this.state.running) {
+            return;
+        }
+
         const url = new URL('timeEntry/Stop?timeEntryId=' + this.state.timeEntry.id, window.location.origin);
         const response = await fetch(url);
 
