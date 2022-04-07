@@ -111,11 +111,12 @@ export class SolvingSession extends Component {
 
     render() {
         let contents;
+        let sessionList;
 
         if (this.state.loading) {
             contents = <p><em>Loading...</em></p>;
         } else if (this.state.solvingSessions.length > 0) {
-            contents = this.renderSessionList();
+            sessionList = this.renderSessionList();
         } else if (this.state.solvingSession === null) {
             contents = this.renderCreateSession();
         } else if (this.state.solvingSession !== null) {
@@ -132,6 +133,7 @@ export class SolvingSession extends Component {
         return (
             <div className="solvingSession">
                 {userElement}
+                {sessionList}
                 {contents}
                 <br />
             </div>
@@ -167,7 +169,7 @@ export class SolvingSession extends Component {
         const response = await fetch(url);
 
         const data = await response.json();
-        this.setState({ loading: false, solvingSession: data });
+        this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
     }
 
     async completeSession() {
