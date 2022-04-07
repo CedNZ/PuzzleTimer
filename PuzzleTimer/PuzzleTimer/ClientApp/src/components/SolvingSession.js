@@ -11,6 +11,7 @@ export class SolvingSession extends Component {
         this.state = {
             loading: true,
             solvingSession: {},
+            solvingSessions: [],
             puzzleId: '',
             showAddUser: false
         };
@@ -37,11 +38,12 @@ export class SolvingSession extends Component {
     renderSession(solvingSession) {
         return (
             <div>
-                <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
-                <div className="btn-group">
-                    <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success">Start Timers</button>
-                    <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger">Stop Timers</button>
+                <div className="btn-group g-3">
+                    <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success btn-lg p-3">Start Timers</button>
+                    <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger btn-lg p-3">Stop Timers</button>
                 </div>
+                <br />
+                <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
                 <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
             </div>
         )
@@ -66,7 +68,7 @@ export class SolvingSession extends Component {
 
     renderUsers() {
         let existingUsers;
-        if (this.state.solvingSession !== null && this.state.solvingSession.users !== undefined && this.state.solvingSession.users.length > 0) {
+        if (this.state.solvingSession !== null && this.state.solvingSession.users !== null && this.state.solvingSession.users.length > 0) {
             existingUsers = this.state.solvingSession.users.map((u) => {
                 return <User key={u.id} user={u} solvingSessionId={this.state.solvingSession.id} >{u.name}</User>
             });
@@ -76,17 +78,33 @@ export class SolvingSession extends Component {
         if (this.state.showAddUser) {
             showAddUser = <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />;
         } else {
-            showAddUser = <button onClick={() => this.setState({ showAddUser: true })} className="btn btn-primary">+</button>
+            showAddUser = <button onClick={() => this.setState({ showAddUser: true })} className="btn btn-primary">Add User</button>
         }
 
         return (
             <div className="userContainer container">
-                <div className="row gx-5">
-                    {existingUsers}
-                </div>
                 <div className="row">
                     {showAddUser}
                 </div>
+                <div className="row gx-5">
+                    {existingUsers}
+                </div>
+            </div>
+        )
+    }
+
+    renderSessionList() {
+        return (
+            <div>
+                {this.state.solvingSessions.map((s) => {
+                    return (
+                        <div key={s.id}>
+                            <p>{s.puzzle.name}</p>
+                            <p>{s.timeTaken}</p>
+                        </div>
+                    )
+                })}
+                {this.renderCreateSession()}
             </div>
         )
     }
@@ -96,6 +114,8 @@ export class SolvingSession extends Component {
 
         if (this.state.loading) {
             contents = <p><em>Loading...</em></p>;
+        } else if (this.state.solvingSessions.length > 0) {
+            contents = this.renderSessionList();
         } else if (this.state.solvingSession === null) {
             contents = this.renderCreateSession();
         } else if (this.state.solvingSession !== null) {
@@ -105,13 +125,12 @@ export class SolvingSession extends Component {
         }
 
         let userElement;
-        if (this.state.solvingSession !== null) {
+        if (this.state.solvingSession !== null && this.state.solvingSession.id !== undefined) {
             userElement = this.renderUsers();
         }
 
         return (
             <div className="solvingSession">
-                <h1>Solving Session</h1>
                 {userElement}
                 {contents}
                 <br />
@@ -126,6 +145,18 @@ export class SolvingSession extends Component {
         if (response.ok) {
             const data = await response.json();
             this.setState({ loading: false, solvingSession: data });
+        } else {
+            this.getSolvingSessions();
+        }
+    }
+
+    async getSolvingSessions() {
+        const url = new URL('solvingSession/GetSessions', window.location.origin);
+        const response = await fetch(url);
+
+        if (response.ok) {
+            const data = await response.json();
+            this.setState({ loading: false, solvingSessions: data });
         } else {
             this.setState({ loading: false, solvingSession: null });
         }

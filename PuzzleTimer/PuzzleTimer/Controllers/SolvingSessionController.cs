@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PuzzleTimer.Interfaces;
@@ -27,6 +28,12 @@ namespace PuzzleTimer.Controllers
                 return Problem();
             }
             return Ok(session);
+        }
+
+        [HttpGet(nameof(GetSessions), Name = nameof(GetSessions))]
+        public async Task<IEnumerable<SolvingSession>> GetSessions()
+        {
+            return await _solvingSessionService.GetSessions();
         }
 
         [HttpGet(nameof(CreateSolvingSession), Name = nameof(CreateSolvingSession))]

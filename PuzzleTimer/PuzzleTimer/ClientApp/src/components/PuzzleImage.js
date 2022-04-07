@@ -18,7 +18,12 @@ export class PuzzleImage extends Component {
     }
 
     componentDidMount() {
+        this.mounted = true;
         this.getImages();
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     encodeImage(element) {
@@ -44,11 +49,11 @@ export class PuzzleImage extends Component {
 
         return (
             <div className="container d-block" data-bs-ride="carousel" id={this.props.puzzleId}>
-                <div className="">
+                <div className="w-50 text-center">
                     {this.state.images.map((img) => {
                         return (
-                            <div className={`${count++ < 1 ? 'active' : ''}`}>
-                                <img src={img.base64} className="w-100" alt={this.props.puzzleId + '-' + count} />
+                            <div className={`${count++ < 1 ? 'active' : ''}`} key={img.id}>
+                                <img src={img.base64} className="img-fluid rounded mx-auto" alt={this.props.puzzleId + '-' + count} />
                             </div>
                         )
                     })}
@@ -113,8 +118,12 @@ export class PuzzleImage extends Component {
         const response = await fetch(url);
 
         if (response.ok) {
-            const data = await response.json();
-            this.setState({ images: data });
+            if (this.mounted) {
+                const data = await response.json();
+                if (this.mounted) {
+                    this.setState({ images: data });
+                }
+            }
         }
     }
 }

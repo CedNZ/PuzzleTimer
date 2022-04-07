@@ -65,7 +65,11 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return await ctx.SolvingSessions.ToListAsync();
+                return await ctx.SolvingSessions
+                    .Include(s => s.Users)
+                    .Include(s => s.Puzzle)
+                    .Include(s => s.TimeEntries)
+                    .ToListAsync();
             }
         }
 
@@ -76,6 +80,7 @@ namespace PuzzleTimer.Repositories
                 return await ctx.SolvingSessions
                     .Include(s => s.Puzzle)
                     .Include(s => s.Users)
+                    .Include(s => s.TimeEntries)
                     .FirstOrDefaultAsync(s => s.Id == id);
             }
         }

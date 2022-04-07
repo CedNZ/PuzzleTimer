@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PuzzleTimer.Models;
 
 namespace PuzzleTimer.Interfaces
@@ -8,6 +9,8 @@ namespace PuzzleTimer.Interfaces
         public Task<SolvingSession> CreateSession(int puzzleId);
 
         public Task<SolvingSession> GetSolvingSession(int id);
+
+        public Task<IEnumerable<SolvingSession>> GetSessions();
 
         public Task<int> DeleteSolvingSession(SolvingSession solvingSession);
 

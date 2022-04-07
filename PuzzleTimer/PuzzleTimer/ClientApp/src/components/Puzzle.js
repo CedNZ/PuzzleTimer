@@ -38,12 +38,8 @@ export class Puzzle extends Component {
         }
     }
 
-    componentWillMount() {
-        ReactModal.setAppElement('body');
-    }
-
     componentDidMount() {
-
+        ReactModal.setAppElement('body');
     }
 
     renderPuzzle(puzzle) {
@@ -83,6 +79,7 @@ export class Puzzle extends Component {
     render() {
         let contents;
         let buttonText;
+        let puzzleImage;
 
         if (this.state.puzzle === null) {
             if (this.state.loading) {
@@ -94,12 +91,13 @@ export class Puzzle extends Component {
         } else {
             contents = this.renderPuzzle(this.state.puzzle);
             buttonText = `${this.state.puzzle.id} - ${this.state.puzzle.name}`;
+            puzzleImage = (<PuzzleImage puzzleId={this.state.puzzle?.id ?? null} sessionId={this.props.sessionId} />);
         }
 
 
         return (
             <div className="puzzle">
-                <PuzzleImage puzzleId={this.state.puzzle?.id ?? null} sessionId={this.props.sessionId} />
+                {puzzleImage}
                 <button onClick={this.handleOpenModal}>{buttonText}</button>
                 <ReactModal isOpen={this.state.showModal}
                             contentLabel="Puzzle Search" >

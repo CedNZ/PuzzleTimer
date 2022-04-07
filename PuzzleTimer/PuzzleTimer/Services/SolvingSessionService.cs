@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -90,6 +91,18 @@ namespace PuzzleTimer.Services
             var sessions = await _sessionRepository.GetSolvingSessionsWhere(predicate);
 
             return sessions.FirstOrDefault();
+        }
+
+        public async Task<IEnumerable<SolvingSession>> GetSessions()
+        {
+            var sessions = await _sessionRepository.GetAllSolvingSessions();
+
+            foreach (var session in sessions)
+            {
+                session.TimeTaken = session.TimeEntries.Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
+            }
+
+            return sessions;
         }
 
         public async Task<SolvingSession> GetSolvingSession(int id)
