@@ -81,6 +81,7 @@ namespace PuzzleTimer.Repositories
                     .Include(s => s.Puzzle)
                     .Include(s => s.Users)
                     .Include(s => s.TimeEntries)
+                    .AsSplitQuery()
                     .FirstOrDefaultAsync(s => s.Id == id);
             }
         }
