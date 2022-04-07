@@ -37,6 +37,7 @@ export class TimeEntry extends Component {
 
     componentWillUnmount() {
         eventBus.remove("timerEvent");
+        clearInterval(this.state.intervalId);
     }
 
     start() {
@@ -132,7 +133,12 @@ export class TimeEntry extends Component {
         if (response.status === 200) {
             const data = await response.json();
 
-            this.setState({ timeEntry: data, running: true });
+            let running = false;
+            if (data.startTime && data.endTime === null) {
+                running = true;
+            }
+
+            this.setState({ timeEntry: data, running: running });
 
             this.start();
         }
