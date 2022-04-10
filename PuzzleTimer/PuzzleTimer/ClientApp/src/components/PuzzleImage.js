@@ -9,8 +9,12 @@ export class PuzzleImage extends Component {
             imgId: '',
             base64: '',
             images: [],
-            fileName: ''
+            fileName: '',
+            uploadDisabled: true,
+            uploadButtonText: 'Upload'
         }
+
+        this.fileInput = React.createRef();
 
         this.encodeImage = this.encodeImage.bind(this);
         this.upload = this.upload.bind(this);
@@ -30,7 +34,7 @@ export class PuzzleImage extends Component {
         var file = element.files[0];
         var reader = new FileReader();
         reader.onloadend = () => {
-            this.setState({ base64: reader.result, fileName: file.name });
+            this.setState({ base64: reader.result, fileName: file.name, uploadDisabled: false });
         }
         reader.readAsDataURL(file);
     }
@@ -38,8 +42,8 @@ export class PuzzleImage extends Component {
     renderUpload() {
         return (
             <div>
-                <input type="file" onChange={(e) => this.encodeImage(e.target)} />
-                <button onClick={() => this.upload()} className="btn btn-primary">Upload</button>
+                <input type="file" onChange={(e) => this.encodeImage(e.target)} ref={this.fileInput} />
+                <button onClick={() => this.upload()} className="btn btn-primary" disabled={this.state.uploadDisabled}>{this.state.uploadButtonText}</button>
             </div>
         )
     }
@@ -81,6 +85,8 @@ export class PuzzleImage extends Component {
             return;
         }
 
+        this.setState({ uploadDisabled: true, uploadButtonText: 'Uploading...' });
+
         const url = new URL('image/addImage', window.location.origin);
 
         const response = await fetch(url, {
@@ -98,10 +104,10 @@ export class PuzzleImage extends Component {
 
         if (response.ok) {
             const data = await response.json();
-            this.setState((prevState) => {
-                prevState.images.push(data);
-            })
+            this.getImages();
         }
+        this.setState({ uploadDisabled: false, uploadButtonText: 'Upload' });
+        this.fileInput.current.value = '';
     }
 
     async getImages() {
