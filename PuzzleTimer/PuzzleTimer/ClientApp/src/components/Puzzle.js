@@ -1,4 +1,5 @@
-﻿import React, { Component } from 'react';
+﻿import { isNumeric } from 'jquery';
+import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import { PuzzleImage } from './PuzzleImage';
 
@@ -13,13 +14,16 @@ export class Puzzle extends Component {
             puzzleBarcode: '',
             puzzleName: '',
             pieceCount: '',
-            showModal: this.props.showModal ?? true
+            showModal: this.props.showModal ?? true,
+            puzzleSelection: []
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
 
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleCloseModal = this.handleCloseModal.bind(this);
+        this.handlePuzzleSearch = this.handlePuzzleSearch.bind(this);
+        this.textPuzzleSearch = this.textPuzzleSearch.bind(this);
         this.puzzleSearch = this.puzzleSearch.bind(this);
         this.createPuzzle = this.createPuzzle.bind(this);
     }
@@ -42,6 +46,20 @@ export class Puzzle extends Component {
         ReactModal.setAppElement('body');
     }
 
+    handlePuzzleSearch(input) {
+        if (!isNumeric(input)) {
+            this.textPuzzleSearch(input);
+        }
+    }
+
+    setSelectedPuzzle(puzzle) {
+        this.setState({
+            loading: false,
+            puzzle: puzzle,
+            puzzleBarcode: puzzle.barcode
+        });
+    }
+
     renderPuzzle(puzzle) {
         return (
             <div>
@@ -54,10 +72,23 @@ export class Puzzle extends Component {
     }
 
     renderPuzzleSearch() {
+        let puzzleSelect;
+        if (this.state.puzzleSelection.length > 0) {
+            puzzleSelect = (
+                <ul>
+                    {this.state.puzzleSelection.map((puzzle) => <li key={puzzle.id} value={puzzle.id} onClick={() => this.setSelectedPuzzle(puzzle)}>{puzzle.name}</li>)}
+                </ul>
+            )
+        }
+
         return (
             <div>
-                <input type="text" value={this.state.puzzleBarcode} onChange={(e) => { this.setState({ puzzleBarcode: e.target.value }); }} />
+                <input type="text" value={this.state.puzzleBarcode} onChange={(e) => {
+                    this.setState({ puzzleBarcode: e.target.value });
+                    this.handlePuzzleSearch(e.target.value);
+                }} />
                 <button onClick={() => { this.puzzleSearch(this) }}>Search</button>
+                {puzzleSelect}
             </div>
         )
     }
@@ -91,7 +122,7 @@ export class Puzzle extends Component {
         } else {
             contents = this.renderPuzzle(this.state.puzzle);
             buttonText = `${this.state.puzzle.id} - ${this.state.puzzle.name}`;
-            puzzleImage = (<PuzzleImage puzzleId={this.state.puzzle?.id ?? null} sessionId={this.props.sessionId} />);
+            puzzleImage = (<PuzzleImage puzzleId={this.state.puzzle?.id ?? null} sessionId={this.props.sessionId}></PuzzleImage>);
         }
 
 
@@ -107,6 +138,15 @@ export class Puzzle extends Component {
                 </ReactModal>
             </div>
         )
+    }
+
+    async textPuzzleSearch(text) {
+        const url = new URL('api/puzzle/findPuzzlesByName?name=' + text, window.location.origin);
+        const response = await fetch(url);
+
+        const data = await response.json();
+
+        this.setState({ puzzleSelection: data });
     }
 
     async puzzleSearch() {

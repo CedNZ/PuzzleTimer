@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
 
@@ -43,6 +44,11 @@ namespace PuzzleTimer.Services
                 return puzzle;
             }
             return null;
+        }
+
+        public async Task<IEnumerable<Puzzle>> FindPuzzlesByName(string name)
+        {
+            return await _puzzleRepository.FindPuzzlesByName(name);
         }
     }
 }

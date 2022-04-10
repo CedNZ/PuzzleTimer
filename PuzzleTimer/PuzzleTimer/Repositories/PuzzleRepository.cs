@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
@@ -28,6 +30,14 @@ namespace PuzzleTimer.Repositories
             using (var ctx = _contextFactory.CreateDbContext())
             {
                 return await ctx.Puzzles.FirstOrDefaultAsync(p => p.Barcode == barcode);
+            }
+        }
+
+        public async Task<IEnumerable<Puzzle>> FindPuzzlesByName(string name)
+        {
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                return await ctx.Puzzles.Where(p => p.Name.StartsWith(name)).ToListAsync();
             }
         }
 

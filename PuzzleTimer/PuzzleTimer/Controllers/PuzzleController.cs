@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PuzzleTimer.Interfaces;
@@ -27,6 +28,13 @@ namespace PuzzleTimer.Controllers
                 return Problem();
             }
             return Ok(puzzle);
+        }
+
+
+        [HttpGet(nameof(FindPuzzlesByName), Name = nameof(FindPuzzlesByName))]
+        public async Task<IEnumerable<Puzzle>> FindPuzzlesByName([FromQuery] string name)
+        {
+            return await _puzzleService.FindPuzzlesByName(name);
         }
 
         [HttpPost("CreatePuzzle", Name = "CreatePuzzle")]

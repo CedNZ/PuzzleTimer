@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PuzzleTimer.Models;
 
 namespace PuzzleTimer.Interfaces
@@ -10,5 +11,7 @@ namespace PuzzleTimer.Interfaces
         public Task<Puzzle> FindPuzzle(string barcode);
 
         public Task<int> AddPuzzle(Puzzle puzzle);
+
+        public Task<IEnumerable<Puzzle>> FindPuzzlesByName(string name);
     }
 }
