@@ -1,11 +1,9 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
 import eventBus from './EventBus';
 
 export class SolvingSession extends Component {
-    static displayName = SolvingSession.name;
-
     constructor(props) {
         super(props);
         this.state = {

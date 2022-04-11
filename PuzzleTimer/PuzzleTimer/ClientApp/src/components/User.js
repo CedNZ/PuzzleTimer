@@ -1,9 +1,7 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { TimeEntry } from './TimeEntry';
 
 export class User extends Component {
-    static displayName = User.name;
-
     constructor(props) {
         super(props);
         this.state = {

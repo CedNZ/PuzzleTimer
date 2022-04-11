@@ -1,8 +1,6 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 
 export class PuzzleImage extends Component {
-    static displayName = PuzzleImage.name;
-
     constructor(props) {
         super(props);
         this.state = {
@@ -103,7 +101,6 @@ export class PuzzleImage extends Component {
         });
 
         if (response.ok) {
-            const data = await response.json();
             this.getImages();
         }
         this.setState({ uploadDisabled: false, uploadButtonText: 'Upload' });

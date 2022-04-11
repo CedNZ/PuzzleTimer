@@ -1,10 +1,8 @@
-﻿import React, { Component } from 'react';
+import React, { Component } from 'react';
 import { DateTime } from 'luxon';
 import eventBus from './EventBus';
 
 export class TimeEntry extends Component {
-    static displayName = TimeEntry.name;
-
     constructor(props) {
         super(props);
         this.state = {

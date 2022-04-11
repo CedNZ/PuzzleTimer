@@ -1,11 +1,9 @@
-﻿import { isNumeric } from 'jquery';
+import { isNumeric } from 'jquery';
 import React, { Component } from 'react';
 import ReactModal from 'react-modal';
 import { PuzzleImage } from './PuzzleImage';
 
 export class Puzzle extends Component {
-    static displayName = Puzzle.name;
-
     constructor(props) {
         super(props);
         this.state = {
