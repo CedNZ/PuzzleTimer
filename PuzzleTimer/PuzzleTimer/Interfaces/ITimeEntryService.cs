@@ -10,6 +10,7 @@ namespace PuzzleTimer.Interfaces
         public Task<TimeEntry> Stop(int timeEntryId, DateTime stopTime);
         public Task<TimeEntry> GetCurrent(int sessionId, int userId);
         public Task<TimeSpan> GetTotalTime(int sessionId, int userId);
+        public Task<TimeSpan> GetTotalTimeForSession(int sessionId);
         public Task<TimeEntry> AddComment(int timeEntryId, string comment);
     }
 }

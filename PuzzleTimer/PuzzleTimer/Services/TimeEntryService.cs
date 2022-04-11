@@ -40,6 +40,13 @@ namespace PuzzleTimer.Services
             return entries.Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
         }
 
+        public async Task<TimeSpan> GetTotalTimeForSession(int sessionId)
+        {
+            var entries = await _repository.GetWhere(te => te.SolvingSession.Id == sessionId && te.EndTime != null);
+
+            return entries.Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
+        }
+
         public async Task<TimeEntry> StartNew(int sessionId, int userId, DateTime startTime)
         {
             return await _repository.Create(sessionId, userId, startTime);

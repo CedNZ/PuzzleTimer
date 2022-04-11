@@ -105,6 +105,13 @@ namespace PuzzleTimer.Services
             return sessions;
         }
 
+        public async Task<string> GetSessionTime(int sessionId)
+        {
+            var timeSpan = await _timeEntryService.GetTotalTimeForSession(sessionId);
+
+            return timeSpan.ToString("h'h 'm'm 's's'");
+        }
+
         public async Task<SolvingSession> GetSolvingSession(int id)
         {
             return await _sessionRepository.GetSolvingSession(id);

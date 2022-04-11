@@ -13,13 +13,15 @@ export class SolvingSession extends Component {
             solvingSession: {},
             solvingSessions: [],
             puzzleId: '',
-            showAddUser: false
+            showAddUser: false,
+            totalTime: ''
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
         this.createSession = this.createSession.bind(this);
         this.completeSession = this.completeSession.bind(this);
         this.addUser = this.addUser.bind(this);
+        this.getTotalTime = this.getTotalTime.bind(this);
         this.dispatchTimerEvent = this.dispatchTimerEvent.bind(this);
     }
 
@@ -33,11 +35,13 @@ export class SolvingSession extends Component {
 
     dispatchTimerEvent(running) {
         eventBus.dispatch("timerEvent", { running: running });
+        setTimeout(() => this.getTotalTime(), 2000);
     }
 
     renderSession(solvingSession) {
         return (
             <div>
+                <h4>{this.state.totalTime}</h4>
                 <div className="btn-group g-3">
                     <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success btn-lg p-3">Start Timers</button>
                     <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger btn-lg p-3">Stop Timers</button>
@@ -147,6 +151,7 @@ export class SolvingSession extends Component {
         if (response.ok) {
             const data = await response.json();
             this.setState({ loading: false, solvingSession: data });
+            this.getTotalTime();
         } else {
             this.getSolvingSessions();
         }
@@ -190,5 +195,14 @@ export class SolvingSession extends Component {
         const data = await response.json();
 
         this.setState({ solvingSession: data, showAddUser: false });
+    }
+
+    async getTotalTime() {
+        const url = new URL('solvingSession/GetSessionTime?sessionId=' + this.state.solvingSession.id, window.location.origin);
+        const response = await fetch(url);
+
+        const data = await response.text();
+
+        this.setState({ totalTime: data });
     }
 }
