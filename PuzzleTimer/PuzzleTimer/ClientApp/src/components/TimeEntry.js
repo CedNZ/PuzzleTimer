@@ -13,7 +13,8 @@ export class TimeEntry extends Component {
             elapsed: null,
             intervalId: 0,
             start: DateTime.now(),
-            total: ''
+            total: '',
+            enabled: true
         }
 
         this.startTimer = this.startTimer.bind(this);
@@ -86,16 +87,25 @@ export class TimeEntry extends Component {
             ? this.renderRunning()
             : this.renderStopped();
 
+        if (!this.state.enabled && !this.state.running) {
+            contents = null;
+        }
+
         return (
             <div className="timeEntry">
                 <p className="card-subtitle text-muted">{this.state.total}</p>
                 {contents}
+                <input type="checkbox"
+                    value={this.state.enabled}
+                    name="checkbox"
+                    onClick={() => this.setState((prevState) => { return { enabled: !prevState.enabled } })} />
+                <label for="checkbox">Disable User?</label>
             </div>
         )
     }
 
     async startTimer() {
-        if (this.state.running) {
+        if (this.state.running || !this.state.enabled) {
             return;
         }
 
