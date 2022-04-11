@@ -54,20 +54,12 @@ export class SolvingSession extends Component {
     }
 
     renderCreateSession = () => {
-        if (this.state.puzzleId === '') {
-            return (
-                <div>
-                    <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
-                </div>
-            )
-        }
-        else {
-            return (
-                <div>
-                    <button onClick={() => this.createSession()} className="btn btn-primary"> Create New Session </button>
-                </div>
-            )
-        }
+        return (
+            <div>
+                <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
+                <button onClick={() => this.createSession()} className="btn btn-primary"> Create New Session </button>
+            </div>
+        )
     }
 
     renderUsers() {
