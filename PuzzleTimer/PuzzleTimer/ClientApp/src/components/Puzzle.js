@@ -58,6 +58,7 @@ export class Puzzle extends Component {
             puzzle: puzzle,
             puzzleBarcode: puzzle.barcode
         });
+        this.puzzleSearchResult(puzzle);
     }
 
     renderPuzzle(puzzle) {
@@ -67,6 +68,7 @@ export class Puzzle extends Component {
                 <p>{puzzle.name}</p>
                 <p>{puzzle.barcode}</p>
                 <p>{puzzle.pieceCount}</p>
+                <button onClick={() => this.setState({ loading: true, puzzle: null, puzzleBarcode: '' })} className="btn btn-primary" >Clear</button>
             </div>
         )
     }
