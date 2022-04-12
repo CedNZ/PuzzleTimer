@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Carousel from 'react-bootstrap/Carousel'
 
 export class PuzzleImage extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export class PuzzleImage extends Component {
         this.encodeImage = this.encodeImage.bind(this);
         this.upload = this.upload.bind(this);
         this.getImages = this.getImages.bind(this);
+        this.deleteImage = this.deleteImage.bind(this);
     }
 
     componentDidMount() {
@@ -50,17 +52,18 @@ export class PuzzleImage extends Component {
         let count = 0;
 
         return (
-            <div className="container d-block" data-bs-ride="carousel" id={this.props.puzzleId}>
-                <div className="w-50 text-center">
-                    {this.state.images.map((img) => {
-                        return (
-                            <div className={`${count++ < 1 ? 'active' : ''}`} key={img.id}>
-                                <img src={img.base64} className="img-fluid rounded mx-auto" alt={this.props.puzzleId + '-' + count} />
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
+            <Carousel fade>
+                {this.state.images.map((img) => {
+                    return (
+                        <Carousel.Item>
+                            <img src={img.base64} className="d-block w-100" alt={this.props.puzzleId + '-' + count} />
+                            <Carousel.Caption>
+                                <button className="btn btn-danger" onClick={() => this.deleteImage(img.id)}>Delete</button>
+                            </Carousel.Caption>
+                        </Carousel.Item>
+                    )
+                })}
+            </Carousel>
         )
     }
 
@@ -71,7 +74,7 @@ export class PuzzleImage extends Component {
         }
 
         return (
-            <div>
+            <div className="container d-block">
                 {existing}
                 {this.renderUpload()}
             </div>
@@ -128,5 +131,14 @@ export class PuzzleImage extends Component {
                 }
             }
         }
+    }
+
+    async deleteImage(id) {
+        const url = new URL('image/deleteImage?id=' + id, window.location.origin);
+        await fetch(url, {
+            method: 'DELETE'
+        });
+
+        this.getImages();
     }
 }

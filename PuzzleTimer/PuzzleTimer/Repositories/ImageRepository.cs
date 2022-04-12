@@ -45,7 +45,9 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                var image = await ctx.Images.FirstOrDefaultAsync(i => i.Id == id);
+                var image = await ctx.Images
+                    .Include(x => x.Puzzle)
+                    .FirstOrDefaultAsync(i => i.Id == id);
 
                 ctx.Remove(image);
 
