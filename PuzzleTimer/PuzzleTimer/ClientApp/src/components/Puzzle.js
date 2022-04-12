@@ -54,7 +54,8 @@ export class Puzzle extends Component {
         this.setState({
             loading: false,
             puzzle: puzzle,
-            puzzleBarcode: puzzle.barcode
+            puzzleBarcode: puzzle.barcode,
+            showModal: false
         });
         this.puzzleSearchResult(puzzle);
     }
