@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Container, Row, Col } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
@@ -92,21 +93,27 @@ export class SolvingSession extends Component {
         return (
             <div>
                 {this.renderCreateSession()}
-                {this.state.solvingSessions.map((s) => {
-                    return (
-                        <Card key={s.id} style={{ width: '18rem' }}>
-                            <Card.Img variant="top" src={`/image/getPic?id=${s.image.id}`} />
-                            <Card.Body>
-                                <Card.Title>{s.puzzle.name}</Card.Title>
-                                <Card.Text>
-                                    {s.timeTaken}
-                                    <br />
-                                    {new Date(s.completed).toLocaleDateString()}
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-                    )
-                })}
+                <Container fluid>
+                    <Row>
+                        {this.state.solvingSessions.map((s) => {
+                            return (
+                                <Col>
+                                    <Card key={s.id} style={{ width: '18rem' }}>
+                                        <Card.Img variant="top" src={`/image/getPic?id=${s.image.id}`} />
+                                        <Card.Body>
+                                            <Card.Title>{s.puzzle.name}</Card.Title>
+                                            <Card.Text>
+                                                {s.timeTaken}
+                                                <br />
+                                                {new Date(s.completed).toLocaleDateString()}
+                                            </Card.Text>
+                                        </Card.Body>
+                                    </Card>
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                </Container>
             </div>
         )
     }
