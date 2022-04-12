@@ -14,6 +14,12 @@ namespace PuzzleTimer.Models
         [NotMapped]
         public string Base64 { get; set; }
 
+        [NotMapped]
+        public string FilePath { get; set; }
+
+        [NotMapped]
+        public string ContentType { get; set; }
+
 #nullable enable
         public SolvingSession? SolvingSession { get; set; }
 #nullable restore

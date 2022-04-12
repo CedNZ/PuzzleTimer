@@ -55,8 +55,8 @@ export class PuzzleImage extends Component {
             <Carousel fade>
                 {this.state.images.map((img) => {
                     return (
-                        <Carousel.Item>
-                            <img src={img.base64} className="d-block w-100" alt={this.props.puzzleId + '-' + count} />
+                        <Carousel.Item key={img.id}>
+                            <img src={`/image/getPic?id=${img.id}`} className="d-block w-100" alt={this.props.puzzleId + '-' + count} />
                             <Carousel.Caption>
                                 <button className="btn btn-danger" onClick={() => this.deleteImage(img.id)}>Delete</button>
                             </Carousel.Caption>

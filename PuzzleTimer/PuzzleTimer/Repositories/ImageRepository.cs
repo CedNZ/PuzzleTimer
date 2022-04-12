@@ -65,10 +65,12 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                var image = await ctx.Images.FirstOrDefaultAsync(i => i.Id == id);
+                var image = await ctx.Images
+                    .Include(i => i.Puzzle)
+                    .FirstOrDefaultAsync(i => i.Id == id);
                 if (image != null)
                 {
-                    return PopulateImageBase64(image);
+                    return PopulateImageInfo(image);
                 }
                 return null;
             }
@@ -84,7 +86,7 @@ namespace PuzzleTimer.Repositories
                     .Where(i => i.Puzzle.Id == puzzleId)
                         .ToListAsync();
 
-                return images.ConvertAll(PopulateImageBase64);
+                return images;
             }
         }
 
@@ -95,7 +97,7 @@ namespace PuzzleTimer.Repositories
                 var images = await ctx.Images.Where(i => i.SolvingSession.Id == sessionId)
                         .ToListAsync();
 
-                return images.ConvertAll(PopulateImageBase64);
+                return images;
             }
         }
 
@@ -117,17 +119,21 @@ namespace PuzzleTimer.Repositories
             return path;
         }
 
-        private static Image PopulateImageBase64(Image image)
+        private static string GetContentType(Image image)
         {
-            var path = GetImagePath(image);
+            var extension = Path.GetExtension(image.FileName).TrimStart('.');
+            if (extension == "jpg")
+            {
+                extension = "jpeg";
+            }
 
-            var bytes = File.ReadAllBytes(path);
+            return $"image/{extension}";
+        }
 
-            image.Base64 = Convert.ToBase64String(bytes);
-
-            var extension = Path.GetExtension(path).TrimStart('.');
-
-            image.Base64 = $"data:image/{extension};base64," + image.Base64;
+        private static Image PopulateImageInfo(Image image)
+        {
+            image.FilePath = GetImagePath(image);
+            image.ContentType = GetContentType(image);
 
             return image;
         }

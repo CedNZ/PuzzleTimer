@@ -14,6 +14,9 @@ namespace PuzzleTimer.Models
         public DateTime? Completed { get; set; }
 
         [NotMapped]
-        public TimeSpan TimeTaken { get; set; }
+        public string TimeTaken { get; set; }
+
+        [NotMapped]
+        public Image Image { get; set; }
     }
 }

@@ -17,10 +17,11 @@ namespace PuzzleTimer.Controllers
             _imageService = imageService;
         }
 
-        [HttpGet(nameof(GetImage), Name = nameof(GetImage))]
-        public async Task<Image> GetImage([FromQuery] int id)
+        [HttpGet(nameof(GetPic), Name = nameof(GetPic))]
+        public async Task<IActionResult> GetPic([FromQuery] int id)
         {
-            return await _imageService.GetImage(id);
+            var image = await _imageService.GetImage(id);
+            return PhysicalFile(image.FilePath, image.ContentType);
         }
 
         [HttpGet(nameof(GetPuzzleImages), Name = nameof(GetPuzzleImages))]

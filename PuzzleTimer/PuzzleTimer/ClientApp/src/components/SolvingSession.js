@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Card from 'react-bootstrap/Card';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
 import eventBus from './EventBus';
@@ -90,15 +91,22 @@ export class SolvingSession extends Component {
     renderSessionList() {
         return (
             <div>
+                {this.renderCreateSession()}
                 {this.state.solvingSessions.map((s) => {
                     return (
-                        <div key={s.id}>
-                            <p>{s.puzzle.name}</p>
-                            <p>{s.timeTaken}</p>
-                        </div>
+                        <Card key={s.id} style={{ width: '18rem' }}>
+                            <Card.Img variant="top" src={`/image/getPic?id=${s.image.id}`} />
+                            <Card.Body>
+                                <Card.Title>{s.puzzle.name}</Card.Title>
+                                <Card.Text>
+                                    {s.timeTaken}
+                                    <br />
+                                    {new Date(s.completed).toLocaleDateString()}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     )
                 })}
-                {this.renderCreateSession()}
             </div>
         )
     }

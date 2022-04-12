@@ -14,13 +14,16 @@ namespace PuzzleTimer.Services
         private readonly ISolvingSessionRepository _sessionRepository;
         private readonly ITimeEntryService _timeEntryService;
         private readonly IUserService _userService;
+        private readonly IImageService _imageService;
 
+        private const string TIMESPAN_TEMPLATE = "h'h 'm'm 's's'";
 
-        public SolvingSessionService(ISolvingSessionRepository sessionRepository, ITimeEntryService timeEntryService, IUserService userService)
+        public SolvingSessionService(ISolvingSessionRepository sessionRepository, ITimeEntryService timeEntryService, IUserService userService, IImageService imageService)
         {
             _sessionRepository = sessionRepository;
             _timeEntryService = timeEntryService;
             _userService = userService;
+            _imageService = imageService;
         }
 
         public async Task<SolvingSession> AddUser(int sessionId, int userId)
@@ -54,7 +57,7 @@ namespace PuzzleTimer.Services
                     .Where(t => t.EndTime.HasValue)
                     .Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
 
-                return totalTime.ToString("h'h 'm'm 's's'");
+                return totalTime.ToString(TIMESPAN_TEMPLATE);
             }
             return "";
         }
@@ -99,7 +102,11 @@ namespace PuzzleTimer.Services
 
             foreach (var session in sessions)
             {
-                session.TimeTaken = session.TimeEntries.Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime));
+                session.TimeTaken = session.TimeEntries
+                    .Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime))
+                    .ToString(TIMESPAN_TEMPLATE);
+
+                session.Image = (await _imageService.GetImagesForPuzzle(session.Puzzle.Id)).FirstOrDefault();
             }
 
             return sessions;
@@ -109,7 +116,7 @@ namespace PuzzleTimer.Services
         {
             var timeSpan = await _timeEntryService.GetTotalTimeForSession(sessionId);
 
-            return timeSpan.ToString("h'h 'm'm 's's'");
+            return timeSpan.ToString(TIMESPAN_TEMPLATE);
         }
 
         public async Task<SolvingSession> GetSolvingSession(int id)
