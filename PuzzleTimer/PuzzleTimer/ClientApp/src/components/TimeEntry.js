@@ -97,7 +97,7 @@ export class TimeEntry extends Component {
                     value={this.state.enabled}
                     name="checkbox"
                     onClick={() => this.setState((prevState) => { return { enabled: !prevState.enabled } })} />
-                <label for="checkbox">Disable User?</label>
+                <label htmlFor="checkbox">Disable User?</label>
             </div>
         )
     }

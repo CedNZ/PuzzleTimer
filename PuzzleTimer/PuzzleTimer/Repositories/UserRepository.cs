@@ -31,7 +31,7 @@ namespace PuzzleTimer.Repositories
         {
             using (var ctx = _contextFactory.CreateDbContext())
             {
-                return await ctx.Users.Where(u => u.Name.StartsWith(name)).ToListAsync();
+                return await ctx.Users.Where(u => EF.Functions.Like(u.Name, $"{name}%")).ToListAsync();
             }
         }
 

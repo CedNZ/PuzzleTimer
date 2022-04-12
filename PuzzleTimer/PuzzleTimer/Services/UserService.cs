@@ -21,7 +21,11 @@ namespace PuzzleTimer.Services
 
         public async Task<IEnumerable<User>> FindUsersByName(string name)
         {
-            return await _userRepository.FindUsersByName(name);
+            if (name is not null && name.Length > 0)
+            {
+                return await _userRepository.FindUsersByName(name);
+            }
+            return default;
         }
 
         public async Task<User> GetUser(int id)

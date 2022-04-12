@@ -144,9 +144,12 @@ export class Puzzle extends Component {
         const url = new URL('api/puzzle/findPuzzlesByName?name=' + text, window.location.origin);
         const response = await fetch(url);
 
-        const data = await response.json();
-
-        this.setState({ puzzleSelection: data });
+        if (response.status == 200) {
+            const data = await response.json();
+            this.setState({ puzzleSelection: data });
+        } else {
+            this.setState({ puzzleSelection: [] });
+        }
     }
 
     async puzzleSearch() {

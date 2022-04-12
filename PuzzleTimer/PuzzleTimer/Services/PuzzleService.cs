@@ -48,7 +48,11 @@ namespace PuzzleTimer.Services
 
         public async Task<IEnumerable<Puzzle>> FindPuzzlesByName(string name)
         {
-            return await _puzzleRepository.FindPuzzlesByName(name);
+            if (name is not null && name.Length > 0)
+            {
+                return await _puzzleRepository.FindPuzzlesByName(name);
+            }
+            return default;
         }
     }
 }
