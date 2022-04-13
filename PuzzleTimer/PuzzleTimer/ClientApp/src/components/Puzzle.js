@@ -129,7 +129,6 @@ export class Puzzle extends Component {
 
         return (
             <div className="puzzle">
-                {puzzleImage}
                 <button onClick={this.handleOpenModal}>{buttonText}</button>
                 <ReactModal isOpen={this.state.showModal}
                             contentLabel="Puzzle Search" >
@@ -137,6 +136,7 @@ export class Puzzle extends Component {
                     {contents}
                     <button onClick={this.handleCloseModal}>Close</button>
                 </ReactModal>
+                {puzzleImage}
             </div>
         )
     }

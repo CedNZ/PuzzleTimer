@@ -97,7 +97,7 @@ export class SolvingSession extends Component {
                     <Row>
                         {this.state.solvingSessions.map((s) => {
                             return (
-                                <Col>
+                                <Col key={s.id}>
                                     <Card key={s.id} style={{ width: '18rem' }}>
                                         <Card.Img variant="top" src={`/image/getPic?id=${s.image.id}`} />
                                         <Card.Body>

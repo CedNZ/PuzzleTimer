@@ -10,7 +10,8 @@ export class PuzzleImage extends Component {
             images: [],
             fileName: '',
             uploadDisabled: true,
-            uploadButtonText: 'Upload'
+            uploadButtonText: 'Upload',
+            width: '18rem'
         }
 
         this.fileInput = React.createRef();
@@ -19,6 +20,7 @@ export class PuzzleImage extends Component {
         this.upload = this.upload.bind(this);
         this.getImages = this.getImages.bind(this);
         this.deleteImage = this.deleteImage.bind(this);
+        this.toggleWidth = this.toggleWidth.bind(this);
     }
 
     componentDidMount() {
@@ -39,6 +41,12 @@ export class PuzzleImage extends Component {
         reader.readAsDataURL(file);
     }
 
+    toggleWidth() {
+        this.setState((prevState) => {
+            return { width: prevState.width == '18rem' ? '36rem' : '18rem' };
+        });
+    }
+
     renderUpload() {
         return (
             <div>
@@ -52,7 +60,7 @@ export class PuzzleImage extends Component {
         let count = 0;
 
         return (
-            <Carousel fade>
+            <Carousel fade style={{ width: this.state.width }} onClick={() => this.toggleWidth()}>
                 {this.state.images.map((img) => {
                     return (
                         <Carousel.Item key={img.id}>
