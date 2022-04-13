@@ -85,19 +85,26 @@ export class TimeEntry extends Component {
             ? this.renderRunning()
             : this.renderStopped();
 
-        if (!this.state.enabled && !this.state.running) {
+        if ((!this.state.enabled && !this.state.running) || this.props.completed) {
             contents = null;
+        }
+
+        let enableUserCheckbox;
+        if (!this.props.completed) {
+            enableUserCheckbox = (<div>
+                <input type="checkbox"
+                    value={this.state.enabled}
+                    name="checkbox"
+                    onClick={() => this.setState((prevState) => { return { enabled: !prevState.enabled } })} />
+                <label htmlFor="checkbox">Disable User?</label>
+            </div>);
         }
 
         return (
             <div className="timeEntry">
                 <p className="card-subtitle text-muted">{this.state.total}</p>
                 {contents}
-                <input type="checkbox"
-                    value={this.state.enabled}
-                    name="checkbox"
-                    onClick={() => this.setState((prevState) => { return { enabled: !prevState.enabled } })} />
-                <label htmlFor="checkbox">Disable User?</label>
+                {enableUserCheckbox}
             </div>
         )
     }

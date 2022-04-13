@@ -51,7 +51,7 @@ export class User extends Component {
         return (
             <div className="card-body">
                 <h4 className="card-title">{this.state.user.id} - {this.state.user.name}</h4>
-                <TimeEntry sessionId={this.state.solvingSessionId} userId={this.state.user.id} />
+                <TimeEntry sessionId={this.state.solvingSessionId} userId={this.state.user.id} completed={this.props.completed} />
             </div>
         )
     }

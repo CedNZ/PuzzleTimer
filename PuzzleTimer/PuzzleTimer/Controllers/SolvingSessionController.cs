@@ -36,6 +36,12 @@ namespace PuzzleTimer.Controllers
             return await _solvingSessionService.GetSessions();
         }
 
+        [HttpGet(nameof(GetSession), Name = nameof(GetSession))]
+        public async Task<SolvingSession> GetSession([FromQuery] int sessionId)
+        {
+            return await _solvingSessionService.GetSolvingSession(sessionId);
+        }
+
         [HttpGet(nameof(GetSessionTime), Name = nameof(GetSessionTime))]
         public async Task<string> GetSessionTime([FromQuery] int sessionId)
         {

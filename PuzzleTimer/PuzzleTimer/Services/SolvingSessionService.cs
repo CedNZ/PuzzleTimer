@@ -106,6 +106,8 @@ namespace PuzzleTimer.Services
                     .Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime))
                     .ToString(TIMESPAN_TEMPLATE);
 
+                session.TimeEntries = null;
+
                 session.Image = (await _imageService.GetImagesForPuzzle(session.Puzzle.Id)).FirstOrDefault();
             }
 

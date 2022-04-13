@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col, Button } from 'react-bootstrap'
 import Card from 'react-bootstrap/Card';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
@@ -39,15 +39,29 @@ export class SolvingSession extends Component {
     }
 
     renderSession(solvingSession) {
-        return (
+        let buttons = (
             <div>
-                <h4>{this.state.totalTime}</h4>
                 <div className="btn-group g-3">
                     <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success btn-lg p-3">Start Timers</button>
                     <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger btn-lg p-3">Stop Timers</button>
                 </div>
                 <br />
                 <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>
+            </div>
+        );
+        if (solvingSession.completed !== null && solvingSession.completed !== undefined) {
+            buttons = (
+                <button onClick={() => this.getSolvingSessions()} className="btn btn-primary">Back to list</button>
+            );
+        }
+
+        return (
+            <div>
+                <h4>{this.state.totalTime}</h4>
+                <br />
+                {buttons}
+                <br />
+                <br />
                 <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
             </div>
         )
@@ -63,10 +77,17 @@ export class SolvingSession extends Component {
     }
 
     renderUsers() {
+        const completedSession = (this.state.solvingSession.completed !== null && this.state.solvingSession.completed !== undefined);
+
         let existingUsers;
         if (this.state.solvingSession !== null && this.state.solvingSession.users !== null && this.state.solvingSession.users.length > 0) {
             existingUsers = this.state.solvingSession.users.map((u) => {
-                return <User key={u.id} user={u} solvingSessionId={this.state.solvingSession.id} >{u.name}</User>
+                return <User key={u.id}
+                    user={u}
+                    solvingSessionId={this.state.solvingSession.id}
+                    completed={completedSession}>
+                    {u.name}
+                </User>
             });
         }
 
@@ -75,6 +96,10 @@ export class SolvingSession extends Component {
             showAddUser = <User solvingSessionId={this.state.solvingSession.id} userSelect={(u) => this.addUser(u.id)} />;
         } else {
             showAddUser = <button onClick={() => this.setState({ showAddUser: true })} className="btn btn-primary">Add User</button>
+        }
+
+        if (completedSession) {
+            showAddUser = null;
         }
 
         return (
@@ -98,8 +123,8 @@ export class SolvingSession extends Component {
                         {this.state.solvingSessions.map((s) => {
                             return (
                                 <Col key={s.id}>
-                                    <Card key={s.id} style={{ width: '18rem' }}>
-                                        <Card.Img variant="top" src={`/image/getPic?id=${s.image.id}`} />
+                                    <Card key={s.id} style={{ width: '18rem' }} onClick={() => this.getSolvingSession(s.id)}>
+                                        <Card.Img variant="top" src={`/image/getPic?id=${s?.image?.id}`} />
                                         <Card.Body>
                                             <Card.Title>{s.puzzle.name}</Card.Title>
                                             <Card.Text>
@@ -155,7 +180,20 @@ export class SolvingSession extends Component {
 
         if (response.ok) {
             const data = await response.json();
-            this.setState({ loading: false, solvingSession: data });
+            this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
+            this.getTotalTime();
+        } else {
+            this.getSolvingSessions();
+        }
+    }
+
+    async getSolvingSession(sessionId) {
+        const url = new URL('solvingsession/GetSession?sessionId=' + sessionId, window.location.origin);
+        const response = await fetch(url);
+
+        if (response.ok) {
+            const data = await response.json();
+            this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
             this.getTotalTime();
         } else {
             this.getSolvingSessions();
@@ -168,9 +206,9 @@ export class SolvingSession extends Component {
 
         if (response.ok) {
             const data = await response.json();
-            this.setState({ loading: false, solvingSessions: data });
+            this.setState({ loading: false, solvingSession: null, solvingSessions: data });
         } else {
-            this.setState({ loading: false, solvingSession: null });
+            this.setState({ loading: false, solvingSession: null, solvingSessions: [] });
         }
     }
 
