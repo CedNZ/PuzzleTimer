@@ -103,7 +103,7 @@ namespace PuzzleTimer.Services
             foreach (var session in sessions)
             {
                 session.TimeTaken = session.TimeEntries
-                    .Aggregate(new TimeSpan(), (agg, next) => agg + (next.EndTime.Value - next.StartTime))
+                    .Aggregate(new TimeSpan(), (agg, next) => agg + ((next.EndTime ?? DateTime.Now) - next.StartTime))
                     .ToString(TIMESPAN_TEMPLATE);
 
                 session.TimeEntries = null;
