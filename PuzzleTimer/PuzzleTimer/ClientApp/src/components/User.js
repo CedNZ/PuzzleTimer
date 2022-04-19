@@ -89,7 +89,7 @@ export class User extends Component {
         const url = new URL('user/FindUsersByName?name=' + name, window.location.origin);
         const response = await fetch(url);
 
-        if (response.status == 200) {
+        if (response.status === 200) {
             const data = await response.json();
             this.setState({ userSelection: data });
         } else {

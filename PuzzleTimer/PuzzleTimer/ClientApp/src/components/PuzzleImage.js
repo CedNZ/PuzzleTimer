@@ -43,7 +43,7 @@ export class PuzzleImage extends Component {
 
     toggleWidth() {
         this.setState((prevState) => {
-            return { width: prevState.width == '18rem' ? '36rem' : '18rem' };
+            return { width: prevState.width === '18rem' ? '36rem' : '18rem' };
         });
     }
 
