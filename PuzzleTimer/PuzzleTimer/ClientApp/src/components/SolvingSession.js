@@ -174,21 +174,11 @@ export class SolvingSession extends Component {
         )
     }
 
-    async getSolvingSession() {
-        const url = new URL('solvingsession', window.location.origin);
-        const response = await fetch(url);
-
-        if (response.ok) {
-            const data = await response.json();
-            this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
-            this.getTotalTime();
-        } else {
-            this.getSolvingSessions();
-        }
-    }
-
     async getSolvingSession(sessionId) {
-        const url = new URL('solvingsession/GetSession?sessionId=' + sessionId, window.location.origin);
+        const url = sessionId === undefined
+            ? new URL('solvingsession', window.location.origin)
+            : new URL('solvingsession/GetSession?sessionId=' + sessionId, window.location.origin);
+
         const response = await fetch(url);
 
         if (response.ok) {

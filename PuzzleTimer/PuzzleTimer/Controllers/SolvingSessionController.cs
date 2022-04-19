@@ -25,7 +25,7 @@ namespace PuzzleTimer.Controllers
 
             if (session == null)
             {
-                return Problem();
+                return Problem("No current session found");
             }
             return Ok(session);
         }
