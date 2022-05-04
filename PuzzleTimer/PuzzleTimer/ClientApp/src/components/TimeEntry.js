@@ -72,7 +72,7 @@ export class TimeEntry extends Component {
         return (
             <div>
                 <p>{elapsed.hours}h {elapsed.minutes}m {elapsed.seconds.toFixed()}s</p>
-                <button onClick={() => this.stopTimer()} className="btn btn-primary btn-lg">⏹︎</button>
+                <button onClick={() => this.stopTimer()} className="btn btn-danger btn-lg">STOP</button>
             </div>
         )
     }
@@ -80,7 +80,7 @@ export class TimeEntry extends Component {
     renderStopped() {
         return (
             <div>
-                <button onClick={() => this.startTimer()} className="btn btn-primary btn-lg">⏵︎</button>
+                <button onClick={() => this.startTimer()} className="btn btn-success btn-lg">START</button>
             </div>
         )
     }
@@ -109,6 +109,7 @@ export class TimeEntry extends Component {
             <div className="timeEntry">
                 <p className="card-subtitle text-muted">{this.state.total}</p>
                 {contents}
+                <br />
                 {enableUserCheckbox}
             </div>
         )
