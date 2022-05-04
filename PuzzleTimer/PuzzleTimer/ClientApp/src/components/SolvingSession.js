@@ -71,7 +71,7 @@ export class SolvingSession extends Component {
         return (
             <div>
                 <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
-                <button onClick={() => this.createSession()} className="btn btn-primary"> Create New Session </button>
+                <button onClick={() => this.createSession()} className="btn btn-primary" disabled={this.state.puzzleId === ''}> Create New Session </button>
             </div>
         )
     }
@@ -219,6 +219,8 @@ export class SolvingSession extends Component {
         this.setState({ loading: false, solvingSession: null, puzzleId: '' });
 
         alert(data);
+
+        this.getSolvingSessions();
     }
 
     async addUser(userId) {
