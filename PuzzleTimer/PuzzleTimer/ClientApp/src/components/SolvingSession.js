@@ -22,28 +22,38 @@ export class SolvingSession extends Component {
         this.completeSession = this.completeSession.bind(this);
         this.addUser = this.addUser.bind(this);
         this.getTotalTime = this.getTotalTime.bind(this);
-        this.dispatchTimerEvent = this.dispatchTimerEvent.bind(this);
+        this.dispatchAllTimerEvent = this.dispatchAllTimerEvent.bind(this);
+        this.handleTimerEvent = this.handleTimerEvent.bind(this);
     }
 
     componentDidMount() {
         this.getSolvingSession();
+        eventBus.on("timerEvent", this.handleTimerEvent);
+    }
+
+    componentWillUnmount() {
+        eventBus.remove("timerEvent", this.handleTimerEvent);
     }
 
     puzzleSearchResult(puzzle) {
         this.setState({ puzzleId: puzzle.id })
     }
 
-    dispatchTimerEvent(running) {
-        eventBus.dispatch("timerEvent", { running: running });
+    dispatchAllTimerEvent(running) {
+        eventBus.dispatch("allTimerEvent", { running: running });
         setTimeout(() => this.getTotalTime(), 2000);
+    }
+
+    handleTimerEvent(data) {
+        this.getTotalTime();
     }
 
     renderSession(solvingSession) {
         let buttons = (
             <div>
                 <div className="btn-group g-3">
-                    <button onClick={() => this.dispatchTimerEvent(true)} className="btn btn-success btn-lg p-3">Start Timers</button>
-                    <button onClick={() => this.dispatchTimerEvent(false)} className="btn btn-danger btn-lg p-3">Stop Timers</button>
+                    <button onClick={() => this.dispatchAllTimerEvent(true)} className="btn btn-success btn-lg p-3">Start Timers</button>
+                    <button onClick={() => this.dispatchAllTimerEvent(false)} className="btn btn-danger btn-lg p-3">Stop Timers</button>
                 </div>
                 <br />
                 <button onClick={() => this.completeSession()} className="btn btn-primary">Complete Session</button>

@@ -27,13 +27,17 @@ export class TimeEntry extends Component {
         this.getCurrent();
         this.getTotal();
         if (!this.props.completed) {
-            eventBus.on("timerEvent", this.handleTimerEvent);
+            eventBus.on("allTimerEvent", this.handleTimerEvent);
         }
     }
 
     componentWillUnmount() {
-        eventBus.remove("timerEvent", this.handleTimerEvent);
+        eventBus.remove("allTimerEvent", this.handleTimerEvent);
         clearInterval(this.state.intervalId);
+    }
+
+    fireTimerEvent(started) {
+        eventBus.dispatch("timerEvent", { started: started });
     }
 
     handleTimerEvent(data) {
@@ -48,6 +52,7 @@ export class TimeEntry extends Component {
         const intervalId = setInterval(() => this.tick(), 1000);
         const start = DateTime.fromISO(this.state.timeEntry.startTime);
         this.setState({ intervalId: intervalId, start: start });
+        this.fireTimerEvent(true);
     }
 
     tick() {
@@ -60,6 +65,7 @@ export class TimeEntry extends Component {
 
     stop() {
         clearInterval(this.state.intervalId);
+        this.fireTimerEvent(false);
     }
 
     renderRunning() {
