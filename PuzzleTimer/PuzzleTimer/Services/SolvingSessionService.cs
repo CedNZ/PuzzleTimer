@@ -16,7 +16,7 @@ namespace PuzzleTimer.Services
         private readonly IUserService _userService;
         private readonly IImageService _imageService;
 
-        private const string TIMESPAN_TEMPLATE = "h'h 'm'm 's's'";
+        private const string TIMESPAN_TEMPLATE = "'PT'h'H'm'M's'S'";
 
         public SolvingSessionService(ISolvingSessionRepository sessionRepository, ITimeEntryService timeEntryService, IUserService userService, IImageService imageService)
         {

@@ -36,8 +36,8 @@ export class TimeEntry extends Component {
         clearInterval(this.state.intervalId);
     }
 
-    fireTimerEvent(started) {
-        eventBus.dispatch("timerEvent", { started: started });
+    fireTimerEvent(data) {
+        eventBus.dispatch("timerEvent", data);
     }
 
     handleTimerEvent(data) {
@@ -52,7 +52,7 @@ export class TimeEntry extends Component {
         const intervalId = setInterval(() => this.tick(), 1000);
         const start = DateTime.fromISO(this.state.timeEntry.startTime);
         this.setState({ intervalId: intervalId, start: start });
-        this.fireTimerEvent(true);
+        this.fireTimerEvent({ start: start, userId: this.props.userId });
     }
 
     tick() {
@@ -65,7 +65,7 @@ export class TimeEntry extends Component {
 
     stop() {
         clearInterval(this.state.intervalId);
-        this.fireTimerEvent(false);
+        this.fireTimerEvent({ start: false, userId: this.props.userId });
     }
 
     renderRunning() {

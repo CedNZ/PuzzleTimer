@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import { Puzzle } from './Puzzle';
 import { User } from './User';
 import eventBus from './EventBus';
+import { DateTime, Duration } from 'luxon';
 
 export class SolvingSession extends Component {
     constructor(props) {
@@ -14,7 +15,10 @@ export class SolvingSession extends Component {
             solvingSessions: [],
             puzzleId: '',
             showAddUser: false,
-            totalTime: ''
+            baseTotalTime: '',
+            totalTime: Duration.fromMillis(0),
+            timerStartTimes: [],
+            tickInterval: -1
         };
 
         this.puzzleSearchResult = this.puzzleSearchResult.bind(this);
@@ -24,6 +28,7 @@ export class SolvingSession extends Component {
         this.getTotalTime = this.getTotalTime.bind(this);
         this.dispatchAllTimerEvent = this.dispatchAllTimerEvent.bind(this);
         this.handleTimerEvent = this.handleTimerEvent.bind(this);
+        this.tick = this.tick.bind(this);
     }
 
     componentDidMount() {
@@ -46,6 +51,35 @@ export class SolvingSession extends Component {
 
     handleTimerEvent(data) {
         this.getTotalTime();
+        if (data.start) {
+            this.setState(prevState => {
+                return { timerStartTimes: [...prevState.timerStartTimes, data] };
+            });
+            if (this.state.tickInterval < 0) {
+                let interval = setInterval(() => this.tick(), 1000);
+                this.setState({ tickInterval: interval });
+            }
+        } else {
+            this.setState(prevState => {
+                return { timerStartTimes: prevState.timerStartTimes.filter((item) => item.userId != data.userId) };
+            });
+            if (this.state.timerStartTimes.length === 0) {
+                clearInterval(this.state.tickInterval);
+                this.setState({ tickInterval: -1 });
+            }
+        }
+    }
+
+    tick() {
+        let now = DateTime.now();
+
+        let time = this.state.timerStartTimes.reduce((agg, next) => {
+            return agg.plus(now.diff(next.start)).shiftTo('hours', 'minutes', 'seconds');
+        }, this.state.baseTotalTime);
+
+        console.log(`tick ${time}`);
+
+        this.setState({ totalTime: time });
     }
 
     renderSession(solvingSession) {
@@ -67,7 +101,7 @@ export class SolvingSession extends Component {
 
         return (
             <div>
-                <h4>{this.state.totalTime}</h4>
+                <h4>{this.state.totalTime.toFormat("h'h 'm'm 's's'")}</h4>
                 <br />
                 {buttons}
                 <br />
@@ -138,7 +172,7 @@ export class SolvingSession extends Component {
                                         <Card.Body>
                                             <Card.Title>{s.puzzle.name}</Card.Title>
                                             <Card.Text>
-                                                {s.timeTaken}
+                                                {Duration.fromISO(s.timeTaken).toHuman()}
                                                 <br />
                                                 {new Date(s.completed).toLocaleDateString()}
                                             </Card.Text>
@@ -248,6 +282,8 @@ export class SolvingSession extends Component {
 
         const data = await response.text();
 
-        this.setState({ totalTime: data });
+        let time = Duration.fromISO(data);
+
+        this.setState({ totalTime: time, baseTotalTime: time });
     }
 }
