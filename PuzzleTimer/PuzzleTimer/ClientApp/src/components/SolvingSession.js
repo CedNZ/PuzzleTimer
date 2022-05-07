@@ -77,8 +77,6 @@ export class SolvingSession extends Component {
             return agg.plus(now.diff(next.start)).shiftTo('hours', 'minutes', 'seconds');
         }, this.state.baseTotalTime);
 
-        console.log(`tick ${time}`);
-
         this.setState({ totalTime: time });
     }
 
