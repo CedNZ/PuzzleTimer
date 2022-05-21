@@ -114,7 +114,7 @@ namespace PuzzleTimer.Services
                 session.Users = session.Users.Select(u => new User { Id = u.Id, Name = u.Name }).ToList();
             }
 
-            return sessions;
+            return sessions.OrderByDescending(s => s.Completed);
         }
 
         public async Task<string> GetSessionTime(int sessionId)
