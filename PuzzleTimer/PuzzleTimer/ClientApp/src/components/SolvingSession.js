@@ -29,6 +29,7 @@ export class SolvingSession extends Component {
         this.dispatchAllTimerEvent = this.dispatchAllTimerEvent.bind(this);
         this.handleTimerEvent = this.handleTimerEvent.bind(this);
         this.tick = this.tick.bind(this);
+        this.filteredSessions = this.filteredSessions.bind(this);
     }
 
     componentDidMount() {
@@ -80,6 +81,19 @@ export class SolvingSession extends Component {
         this.setState({ totalTime: time });
     }
 
+    filteredSessions() {
+        let puzzleId = this.state.puzzleId;
+        if (puzzleId === null) {
+            if (this.state.solvingSession === null) {
+                return this.state.solvingSessions;
+            }
+            puzzleId = this.state.solvingSession.puzzle.id;
+        }
+
+        return this.state.solvingSessions.filter(s => s.puzzle.id === puzzleId
+            && s.id !== this.state.solvingSession?.id)
+    }
+
     renderSession(solvingSession) {
         let buttons = (
             <div>
@@ -105,6 +119,19 @@ export class SolvingSession extends Component {
                 <br />
                 <br />
                 <Puzzle puzzle={solvingSession.puzzle} showModal={false} />
+                <br />
+                <br />
+                <Container fluid>
+                    <Row>
+                        {this.filteredSessions().map((s) => {
+                            return (
+                                <Col key={s.id}>
+                                    {this.renderSessionCard(s)}
+                                </Col>
+                            )
+                        })}
+                    </Row>
+                </Container>
             </div>
         )
     }
@@ -201,12 +228,12 @@ export class SolvingSession extends Component {
 
         if (this.state.loading) {
             contents = <p><em>Loading...</em></p>;
+        } else if (this.state.solvingSession !== null) {
+            contents = this.renderSession(this.state.solvingSession);
         } else if (this.state.solvingSessions.length > 0) {
             sessionList = this.renderSessionList();
         } else if (this.state.solvingSession === null) {
             contents = this.renderCreateSession();
-        } else if (this.state.solvingSession !== null) {
-            contents = this.renderSession(this.state.solvingSession);
         } else {
             contents = <h1>Shit's fucked</h1>;
         }
