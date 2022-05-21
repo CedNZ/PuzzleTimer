@@ -20,7 +20,9 @@ namespace PuzzleTimer.Models
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("Server=.; Database=PuzzleTimer; Integrated Security=SSPI; TrustServerCertificate=True;");
-            optionsBuilder.UseSqlite("Data Source=PuzzleTimerDB.db;");
+            optionsBuilder.UseSqlite("Data Source=PuzzleTimerDB.db;",
+                options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+
             optionsBuilder.ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.AmbientTransactionWarning));
         }
     }
