@@ -13,7 +13,7 @@ export class SolvingSession extends Component {
             loading: true,
             solvingSession: {},
             solvingSessions: [],
-            puzzleId: '',
+            puzzleId: null,
             showAddUser: false,
             baseTotalTime: '',
             totalTime: Duration.fromMillis(0),
@@ -107,7 +107,10 @@ export class SolvingSession extends Component {
         );
         if (solvingSession.completed !== null && solvingSession.completed !== undefined) {
             buttons = (
-                <button onClick={() => this.getSolvingSessions()} className="btn btn-primary">Back to list</button>
+                <button onClick={() => {
+                    this.setState({ solvingSession: null });
+                    this.getSolvingSessions();
+                }} className="btn btn-primary">Back to list</button>
             );
         }
 
@@ -209,7 +212,7 @@ export class SolvingSession extends Component {
                 {this.renderCreateSession()}
                 <Container fluid>
                     <Row>
-                        {this.state.solvingSessions.map((s) => {
+                        {this.filteredSessions().map((s) => {
                             return (
                                 <Col key={s.id}>
                                     {this.renderSessionCard(s, true)}
@@ -259,14 +262,15 @@ export class SolvingSession extends Component {
             : new URL('solvingsession/GetSession?sessionId=' + sessionId, window.location.origin);
 
         const response = await fetch(url);
-
+        
         if (response.ok) {
             const data = await response.json();
-            this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
+            this.setState({ loading: false, solvingSession: data, totalTime: Duration.fromMillis(0) });
             this.getTotalTime();
         } else {
-            this.getSolvingSessions();
+            this.setState({ loading: false, solvingSession: null, totalTime: Duration.fromMillis(0) });
         }
+        this.getSolvingSessions();
     }
 
     async getSolvingSessions() {
@@ -275,9 +279,9 @@ export class SolvingSession extends Component {
 
         if (response.ok) {
             const data = await response.json();
-            this.setState({ loading: false, solvingSession: null, solvingSessions: data });
+            this.setState({ loading: false, solvingSessions: data });
         } else {
-            this.setState({ loading: false, solvingSession: null, solvingSessions: [] });
+            this.setState({ loading: false, solvingSessions: [] });
         }
     }
 
@@ -286,16 +290,21 @@ export class SolvingSession extends Component {
         const response = await fetch(url);
 
         const data = await response.json();
-        this.setState({ loading: false, solvingSession: data, solvingSessions: [] });
+        this.setState({ loading: false, solvingSession: data });
     }
 
     async completeSession() {
+        if (this.state.tickInterval > 0) {
+            clearInterval(this.state.tickInterval);
+            this.setState({ tickInterval: -1 });
+        }
+
         const url = new URL('solvingSession/CompleteSession?sessionId=' + this.state.solvingSession.id, window.location.origin);
         const response = await fetch(url);
 
         const data = await response.text();
 
-        this.setState({ loading: false, solvingSession: null, puzzleId: '' });
+        this.setState({ loading: false, solvingSession: null, puzzleId: null });
 
         alert(data);
 
