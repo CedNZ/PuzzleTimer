@@ -156,6 +156,26 @@ export class SolvingSession extends Component {
         )
     }
 
+    renderSessionCard(s, clickable) {
+        return (
+            <Card key={s.id} style={{ width: '18rem' }} onClick={() => clickable ? this.getSolvingSession(s.id) : ''}>
+                <Card.Img variant="top" src={`/image/getPic?id=${s?.image?.id}`} />
+                <Card.Body>
+                    <Card.Title>{s.puzzle.name}</Card.Title>
+                    <Card.Text>
+                        {Duration.fromISO(s.timeTaken).toHuman()}
+                        <br />
+                        {(s.puzzle.pieceCount / ((Duration.fromISO(s.timeTaken).toMillis()) / 1000 / 60)).toFixed(2)} pieces per minute
+                        <br />
+                        {s.users.map(u => u.name).join(', ')}
+                        <br />
+                        {new Date(s.completed).toLocaleDateString()}
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        )
+    }
+
     renderSessionList() {
         return (
             <div>
@@ -165,21 +185,7 @@ export class SolvingSession extends Component {
                         {this.state.solvingSessions.map((s) => {
                             return (
                                 <Col key={s.id}>
-                                    <Card key={s.id} style={{ width: '18rem' }} onClick={() => this.getSolvingSession(s.id)}>
-                                        <Card.Img variant="top" src={`/image/getPic?id=${s?.image?.id}`} />
-                                        <Card.Body>
-                                            <Card.Title>{s.puzzle.name}</Card.Title>
-                                            <Card.Text>
-                                                {Duration.fromISO(s.timeTaken).toHuman()}
-                                                <br />
-                                                {(s.puzzle.pieceCount / ((Duration.fromISO(s.timeTaken).toMillis()) / 1000 / 60)).toFixed(2)} pieces per minute
-                                                <br />
-                                                {s.users.map(u => u.name).join(', ')}
-                                                <br />
-                                                {new Date(s.completed).toLocaleDateString()}
-                                            </Card.Text>
-                                        </Card.Body>
-                                    </Card>
+                                    {this.renderSessionCard(s, true)}
                                 </Col>
                             )
                         })}
