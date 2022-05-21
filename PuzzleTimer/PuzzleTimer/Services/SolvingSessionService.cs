@@ -82,9 +82,10 @@ namespace PuzzleTimer.Services
             }
         }
 
-        public async Task<int> DeleteSolvingSession(SolvingSession solvingSession)
+        public async Task<bool> DeleteSolvingSession(int solvingSessionId)
         {
-            return await _sessionRepository.DeleteSolvingSession(solvingSession);
+            var solvingSession = await _sessionRepository.GetSolvingSession(solvingSessionId);
+            return await _sessionRepository.DeleteSolvingSession(solvingSession) > 0;
         }
 
         public async Task<SolvingSession> GetCurrentSession()

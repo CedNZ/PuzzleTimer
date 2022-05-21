@@ -107,10 +107,21 @@ export class SolvingSession extends Component {
         );
         if (solvingSession.completed !== null && solvingSession.completed !== undefined) {
             buttons = (
-                <button onClick={() => {
-                    this.setState({ solvingSession: null });
-                    this.getSolvingSessions();
-                }} className="btn btn-primary">Back to list</button>
+                <div className="btn-group">
+                    <button onClick={() => {
+                        this.setState({ solvingSession: null, puzzleId: null });
+                        this.getSolvingSessions();
+                    }} className="btn btn-primary">
+                        Back to list
+                    </button>
+                    <button onClick={() => {
+                        if (window.confirm('Are you sure you want to delete this session?')) {
+                            this.deleteSession();
+                        }
+                    }} className="btn btn-danger">
+                        Delete Session
+                    </button>
+                </div>
             );
         }
 
@@ -129,7 +140,7 @@ export class SolvingSession extends Component {
                         {this.filteredSessions().map((s) => {
                             return (
                                 <Col key={s.id}>
-                                    {this.renderSessionCard(s)}
+                                    {this.renderSessionCard(s, solvingSession.completed)}
                                 </Col>
                             )
                         })}
@@ -143,7 +154,7 @@ export class SolvingSession extends Component {
         return (
             <div>
                 <Puzzle puzzleSearchResult={(p) => this.puzzleSearchResult(p)} showModal={false} />
-                <button onClick={() => this.createSession()} className="btn btn-primary" disabled={this.state.puzzleId === ''}> Create New Session </button>
+                <button onClick={() => this.createSession()} className="btn btn-primary" disabled={this.state.puzzleId === null}> Create New Session </button>
             </div>
         )
     }
@@ -329,5 +340,15 @@ export class SolvingSession extends Component {
         let time = Duration.fromISO(data);
 
         this.setState({ totalTime: time, baseTotalTime: time });
+    }
+
+    async deleteSession() {
+        const url = new URL('solvingSession/DeleteSession?sessionId=' + this.state.solvingSession.id, window.location.origin);
+        const response = await fetch(url);
+
+        if (response.status === 200) {
+            this.setState({ solvingSession: null });
+            this.getSolvingSessions();
+        }
     }
 }

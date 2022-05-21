@@ -12,7 +12,7 @@ namespace PuzzleTimer.Interfaces
 
         public Task<IEnumerable<SolvingSession>> GetSessions();
 
-        public Task<int> DeleteSolvingSession(SolvingSession solvingSession);
+        public Task<bool> DeleteSolvingSession(int solvingSessionId);
 
         public Task<SolvingSession> GetCurrentSession();
 

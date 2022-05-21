@@ -60,6 +60,12 @@ namespace PuzzleTimer.Controllers
             return await _solvingSessionService.CompleteSession(sessionId);
         }
 
+        [HttpGet(nameof(DeleteSession), Name = nameof(DeleteSession))]
+        public async Task<bool> DeleteSession([FromQuery] int sessionId)
+        {
+            return await _solvingSessionService.DeleteSolvingSession(sessionId);
+        }
+
         [HttpGet(nameof(AddUser), Name = nameof(AddUser))]
         public async Task<SolvingSession> AddUser([FromQuery] int sessionId, [FromQuery] int userId)
         {
