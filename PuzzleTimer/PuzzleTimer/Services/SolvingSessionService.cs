@@ -109,6 +109,8 @@ namespace PuzzleTimer.Services
                 session.TimeEntries = null;
 
                 session.Image = (await _imageService.GetImagesForPuzzle(session.Puzzle.Id)).FirstOrDefault();
+
+                session.Users = session.Users.Select(u => new User { Id = u.Id, Name = u.Name }).ToList();
             }
 
             return sessions;

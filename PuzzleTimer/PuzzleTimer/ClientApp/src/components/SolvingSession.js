@@ -174,6 +174,8 @@ export class SolvingSession extends Component {
                                                 <br />
                                                 {(s.puzzle.pieceCount / ((Duration.fromISO(s.timeTaken).toMillis()) / 1000 / 60)).toFixed(2)} pieces per minute
                                                 <br />
+                                                {s.users.map(u => u.name).join(', ')}
+                                                <br />
                                                 {new Date(s.completed).toLocaleDateString()}
                                             </Card.Text>
                                         </Card.Body>

@@ -68,6 +68,7 @@ namespace PuzzleTimer.Repositories
                 return await ctx.SolvingSessions
                     .Include(s => s.Puzzle)
                     .Include(s => s.TimeEntries)
+                    .Include(s => s.Users)
                     .ToListAsync();
             }
         }
