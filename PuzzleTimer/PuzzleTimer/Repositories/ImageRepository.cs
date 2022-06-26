@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using PuzzleTimer.Interfaces;
 using PuzzleTimer.Models;
@@ -11,12 +12,14 @@ namespace PuzzleTimer.Repositories
 {
     public class ImageRepository : IImageRepository
     {
-        private const string BASE_DIR = @"/tmp/PuzzleTimer/";
+        private readonly string BASE_DIR;
         private readonly IDbContextFactory<ApplicationContext> _contextFactory;
 
-        public ImageRepository(IDbContextFactory<ApplicationContext> contextFactory)
+        public ImageRepository(IDbContextFactory<ApplicationContext> contextFactory, IWebHostEnvironment webHostEnvironment)
         {
             _contextFactory = contextFactory;
+
+            BASE_DIR = Path.Combine(webHostEnvironment.WebRootPath, "PuzzleTimerPics");
         }
 
         public async Task<Image> AddImage(Image image)
@@ -101,8 +104,9 @@ namespace PuzzleTimer.Repositories
             }
         }
 
-        private static string GetImagePath(Image image)
+        private string GetImagePath(Image image)
         {
+            
             var path = Path.Combine(BASE_DIR, image.Puzzle.Id.ToString());
             if (image.SolvingSession?.Id != null)
             {
@@ -130,7 +134,7 @@ namespace PuzzleTimer.Repositories
             return $"image/{extension}";
         }
 
-        private static Image PopulateImageInfo(Image image)
+        private Image PopulateImageInfo(Image image)
         {
             image.FilePath = GetImagePath(image);
             image.ContentType = GetContentType(image);
