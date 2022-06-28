@@ -127,7 +127,9 @@ export class SolvingSession extends Component {
 
         return (
             <div>
-                <h4>{this.state.totalTime.toFormat("d' days' h'h 'm'm 's's'")}</h4>
+                <h4>{this.state.totalTime.days > 0 ? this.state.totalTime.toFormat("d' days' h'h 'm'm 's's'")
+                    : this.state.totalTime.hours > 0 ? this.state.totalTime.toFormat("h'h 'm'm 's's'")
+                        : this.state.totalTime.toFormat("m'm 's's'") }</h4>
                 <br />
                 {buttons}
                 <br />
@@ -204,7 +206,9 @@ export class SolvingSession extends Component {
                 <Card.Body>
                     <Card.Title>{s.puzzle.name}</Card.Title>
                     <Card.Text>
-                        {Duration.fromISO(s.timeTaken).toHuman()}
+                        {Duration.fromISO(s.timeTaken).days > 0 ? Duration.fromISO(s.timeTaken).toFormat("d' days' h'h 'm'm 's's'")
+                            : Duration.fromISO(s.timeTaken).hours > 0 ? Duration.fromISO(s.timeTaken).toFormat("h'h 'm'm 's's'")
+                                : Duration.fromISO(s.timeTaken).toFormat("m'm 's's'")}
                         <br />
                         {(s.puzzle.pieceCount / ((Duration.fromISO(s.timeTaken).toMillis()) / 1000 / 60)).toFixed(2)} pieces per minute
                         <br />

@@ -113,7 +113,9 @@ export class TimeEntry extends Component {
 
         return (
             <div className="timeEntry">
-                <p className="card-subtitle text-muted">{this.state.total.toHuman()}</p>
+                <p className="card-subtitle text-muted">{this.state.total.days > 0 ? this.state.total.toFormat("d' days' h'h 'm'm 's's'")
+                    : this.state.total.hours > 0 ? this.state.total.toFormat("h'h 'm'm 's's'")
+                        : this.state.total.toFormat("m'm 's's'")}</p>
                 {contents}
                 <br />
                 {enableUserCheckbox}
