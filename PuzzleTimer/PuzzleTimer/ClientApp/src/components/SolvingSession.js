@@ -75,7 +75,7 @@ export class SolvingSession extends Component {
         let now = DateTime.now();
 
         let time = this.state.timerStartTimes.reduce((agg, next) => {
-            return agg.plus(now.diff(next.start)).shiftTo('hours', 'minutes', 'seconds');
+            return agg.plus(now.diff(next.start)).shiftTo('days', 'hours', 'minutes', 'seconds');
         }, this.state.baseTotalTime);
 
         this.setState({ totalTime: time });
@@ -127,7 +127,7 @@ export class SolvingSession extends Component {
 
         return (
             <div>
-                <h4>{this.state.totalTime.toFormat("h'h 'm'm 's's'")}</h4>
+                <h4>{this.state.totalTime.toFormat("d' days' h'h 'm'm 's's'")}</h4>
                 <br />
                 {buttons}
                 <br />

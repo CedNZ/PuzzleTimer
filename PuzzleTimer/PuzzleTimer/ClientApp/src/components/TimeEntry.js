@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import eventBus from './EventBus';
 
 export class TimeEntry extends Component {
@@ -11,7 +11,7 @@ export class TimeEntry extends Component {
             elapsed: null,
             intervalId: 0,
             start: DateTime.now(),
-            total: '',
+            total: Duration.fromMillis(0),
             enabled: true
         }
 
@@ -113,7 +113,7 @@ export class TimeEntry extends Component {
 
         return (
             <div className="timeEntry">
-                <p className="card-subtitle text-muted">{this.state.total}</p>
+                <p className="card-subtitle text-muted">{this.state.total.toHuman()}</p>
                 {contents}
                 <br />
                 {enableUserCheckbox}
@@ -177,6 +177,8 @@ export class TimeEntry extends Component {
 
         const data = await response.text();
 
-        this.setState({ total: data });
+        let time = Duration.fromISO(data);
+
+        this.setState({ total: time });
     }
 }
